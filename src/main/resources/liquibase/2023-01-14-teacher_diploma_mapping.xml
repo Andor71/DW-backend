@@ -1,0 +1,20 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-teacher_diploma_mapping-table" author="apal">
+        <createTable tableName="teacher_diploma_mapping">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="diploma_id" type="bigint">
+                <constraints foreignKeyName="fk_diploma_id" references="diploma(diploma_id)"/>
+            </column>
+            <column name="teacher_id" type="bigint">
+                <constraints foreignKeyName="fk_teacher_mapping_id" references="users(user_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

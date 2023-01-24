@@ -1,0 +1,22 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-document-table" author="apal">
+        <createTable tableName="document">
+            <column name="document_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)"/>
+            <column name="major_id" type="bigint">
+                <constraints foreignKeyName="fk_major_id" references="major(major_id)"/>
+            </column>
+            <column name="id_period" type="bigint">
+                <constraints foreignKeyName="fk_period_id" references="period(period_id)"/>
+            </column>
+            <column name="path" type="varchar(64)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

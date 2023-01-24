@@ -1,0 +1,26 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-period-table" author="apal">
+        <createTable tableName="period">
+            <column name="period_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="active" type="boolean"/>
+            <column name="start_of_entering_topics" type="date"/>
+            <column name="end_of_entering_topics" type="date"/>
+            <column name="first_topic_advertisement" type="date"/>
+            <column name="first_topic_advertisement_end" type="date"/>
+            <column name="first_allocation" type="date"/>
+            <column name="second_topic_advertisement" type="date"/>
+            <column name="second_topic_advertisement_end" type="date"/>
+            <column name="implementation_of_topics" type="date"/>
+            <column name="documentum_upload" type="date"/>
+            <column name="diploma_defend" type="date"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

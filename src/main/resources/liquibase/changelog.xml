@@ -1,0 +1,18 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <include file="liquibase/2022-01-12-period.xml" />
+    <include file="liquibase/2023-01-14-department.xml" />
+    <include file="liquibase/2023-01-14-major.xml" />
+    <include file="liquibase/2023-01-14-users.xml" />
+    <include file="liquibase/2023-01-14-diploma.xml" />
+    <include file="liquibase/2023-01-14-diploma_files.xml" />
+    <include file="liquibase/2023-01-14-teacher_diploma_mapping.xml" />
+    <include file="liquibase/2023-01-14-comment.xml" />
+    <include file="liquibase/2023-01-14-document.xml"/>
+
+
+</databaseChangeLog>

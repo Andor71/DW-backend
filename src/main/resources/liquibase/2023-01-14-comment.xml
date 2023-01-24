@@ -1,0 +1,23 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-comment-table" author="apal">
+        <createTable tableName="comment">
+            <column name="comment_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="message" type="text"/>
+            <column name="diploma_id" type="bigint">
+                <constraints foreignKeyName="fk_diploma_id" references="diploma(diploma_id)"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk_user_id" references="users(user_id)"/>
+            </column>
+            <column name="score" type="integer"/>
+            <column name="date" type="date"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
