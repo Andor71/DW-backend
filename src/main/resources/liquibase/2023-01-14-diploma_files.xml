@@ -18,4 +18,13 @@
             <column name="visibility" type="integer"/>
         </createTable>
     </changeSet>
+    <changeSet id="deletecommendddf" author="apal">
+        <dropForeignKeyConstraint baseTableName="diploma_files" constraintName="fk_diploma_id"/>
+
+        <addForeignKeyConstraint baseTableName="diploma_files" baseColumnNames="diploma_id"
+                                 constraintName="fk_diploma_id"
+                                 referencedTableName="diploma" referencedColumnNames="diploma_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
 </databaseChangeLog>

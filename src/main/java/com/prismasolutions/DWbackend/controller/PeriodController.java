@@ -32,6 +32,29 @@ public class PeriodController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        try {
 
-
+            return ResponseEntity.ok().body(periodService.delete(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+    @GetMapping("/get-by-id/{id}")
+    public ResponseEntity<?> getByID(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok().body(periodService.getById(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+    @GetMapping("/get-by-major-id/{id}")
+    public ResponseEntity<?> getByMajorID(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok().body(periodService.getPeriodByMajorId(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
 }

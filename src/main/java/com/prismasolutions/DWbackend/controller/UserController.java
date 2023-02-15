@@ -3,9 +3,8 @@ package com.prismasolutions.DWbackend.controller;
 import com.prismasolutions.DWbackend.config.TokenAuthenticationService;
 import com.prismasolutions.DWbackend.config.UserAuthenticationProvider;
 import com.prismasolutions.DWbackend.dto.user.UserLoginDto;
-import com.prismasolutions.DWbackend.service.IUserService;
+import com.prismasolutions.DWbackend.service.UserService;
 import lombok.AllArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 @Controller
 @RequestMapping("/user")
@@ -27,7 +25,7 @@ public class UserController {
 
     private final TokenAuthenticationService tokenAuthenticationService;
     private final UserAuthenticationProvider userAuthenticationProvider;
-    private final IUserService userService;
+    private final UserService userService;
 
     @GetMapping("/health-check")
     public ResponseEntity<?> healthCheck() {

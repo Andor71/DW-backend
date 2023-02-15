@@ -2,13 +2,18 @@ package com.prismasolutions.DWbackend.mapper;
 
 import com.prismasolutions.DWbackend.dto.period.PeriodDto;
 import com.prismasolutions.DWbackend.entity.PeriodEntity;
+import com.prismasolutions.DWbackend.repository.MajorRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@AllArgsConstructor
 public class PeriodMapper {
+
+    private final MajorMapper majorMapper;
 
     public PeriodDto toDto(PeriodEntity periodEntity){
         PeriodDto periodDto = new PeriodDto();
@@ -24,7 +29,9 @@ public class PeriodMapper {
         periodDto.setImplementationOfTopics(periodEntity.getImplementationOfTopics());
         periodDto.setDocumentumUpload(periodEntity.getDocumentumUpload());
         periodDto.setDiplomaDefend(periodEntity.getDiplomaDefend());
-
+        if(periodEntity.getMajor() != null){
+            periodDto.setMajor(majorMapper.toDto(periodEntity.getMajor()));
+        }
         return periodDto;
     }
     public List<PeriodDto> toDtoList(List<PeriodEntity> periodEntities){
@@ -45,6 +52,8 @@ public class PeriodMapper {
         periodEntity.setImplementationOfTopics(periodDto.getImplementationOfTopics());
         periodEntity.setDocumentumUpload(periodDto.getDocumentumUpload());
         periodEntity.setDiplomaDefend(periodDto.getDiplomaDefend());
+
+        periodEntity.setMajor(majorMapper.toEntity(periodDto.getMajor()));
 
         return periodEntity;
     }

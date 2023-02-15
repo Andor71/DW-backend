@@ -11,7 +11,11 @@ public interface PeriodService {
 
     PeriodDto update(PeriodDto periodDto);
 
-    PeriodDto getPeriodById(Long id);
+    PeriodDto getPeriodByMajorId(Long id);
 
     List<PeriodDto> getAllActivePeriod();
+
+    Long delete(Long id);
+
+    PeriodDto getById(Long id);
 }

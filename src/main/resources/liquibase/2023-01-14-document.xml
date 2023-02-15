@@ -19,4 +19,39 @@
             <column name="path" type="varchar(64)"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="deletedocumentable" author="apal">
+        <dropForeignKeyConstraint baseTableName="document" constraintName="fk_major_id"/>
+        <dropForeignKeyConstraint baseTableName="document" constraintName="fk_period_id"/>
+
+        <addForeignKeyConstraint baseTableName="document" baseColumnNames="major_id"
+                                 constraintName="fk_major_id"
+                                 referencedTableName="major" referencedColumnNames="major_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+
+        <addForeignKeyConstraint baseTableName="document" baseColumnNames="id_period"
+                                 constraintName="fk_period_id"
+                                 referencedTableName="period" referencedColumnNames="period_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
+
+    <changeSet id="removefkcolumns" author="apal">
+        <dropColumn tableName="document">
+            <column name="major_id" type="bigint"/>
+        </dropColumn>
+        <dropColumn tableName="document">
+            <column name="id_period" type="bigint"/>
+        </dropColumn>
+        <addColumn tableName="document">
+            <column name="fk_year_id" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="document" baseColumnNames="fk_year_id"
+                                 constraintName="fk_year_id"
+                                 referencedTableName="year" referencedColumnNames="year_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
 </databaseChangeLog>

@@ -18,12 +18,8 @@ public class DocumentEntity{
     private String name;
 
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "major_id", foreignKey = @ForeignKey(name = "fk_major_id"))
-    private MajorEntity major;
-
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "id_period", foreignKey = @ForeignKey(name = "fk_period_id"))
-    private PeriodEntity period;
+    @JoinColumn(name = "fk_year_id", foreignKey = @ForeignKey(name = "fk_year_id"))
+    private YearEntity year;
 
     @Column(name = "path", length = 64)
     private String path;

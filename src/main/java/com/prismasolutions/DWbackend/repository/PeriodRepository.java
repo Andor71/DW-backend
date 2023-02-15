@@ -6,4 +6,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PeriodRepository extends JpaRepository<PeriodEntity, Long> {
+    PeriodEntity findByMajor_MajorId(Long majorId);
+
+    boolean existsByMajor_MajorId(Long majorId);
+
+
+
+
 }

@@ -21,4 +21,13 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="deletemuser" author="apal">
+        <dropForeignKeyConstraint baseTableName="users" constraintName="fk_major_id"/>
+
+        <addForeignKeyConstraint baseTableName="users" baseColumnNames="major_id"
+                                 constraintName="fk_major_id"
+                                 referencedTableName="major" referencedColumnNames="major_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
 </databaseChangeLog>

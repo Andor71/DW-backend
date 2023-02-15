@@ -17,4 +17,22 @@
             </column>
         </createTable>
     </changeSet>
+
+
+    <changeSet id="deletemapping" author="apal">
+        <dropForeignKeyConstraint baseTableName="teacher_diploma_mapping" constraintName="fk_diploma_id"/>
+        <dropForeignKeyConstraint baseTableName="teacher_diploma_mapping" constraintName="fk_teacher_mapping_id"/>
+
+        <addForeignKeyConstraint baseTableName="teacher_diploma_mapping" baseColumnNames="diploma_id"
+                                 constraintName="fk_diploma_id"
+                                 referencedTableName="diploma" referencedColumnNames="diploma_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+
+        <addForeignKeyConstraint baseTableName="teacher_diploma_mapping" baseColumnNames="teacher_id"
+                                 constraintName="fk_teacher_mapping_id"
+                                 referencedTableName="users" referencedColumnNames="user_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
 </databaseChangeLog>

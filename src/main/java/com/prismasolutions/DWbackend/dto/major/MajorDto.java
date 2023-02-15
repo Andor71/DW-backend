@@ -1,22 +1,16 @@
 package com.prismasolutions.DWbackend.dto.major;
 
+import com.prismasolutions.DWbackend.dto.year.YearDto;
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class MajorDto {
 
     private Long majorId;
 
-    private String year;
+    private YearDto year;
 
     private String programme;
 
     private String diplomaType;
-
-    private Date startYear;
-
-    private Date endYear;
-
 }

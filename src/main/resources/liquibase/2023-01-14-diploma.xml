@@ -30,4 +30,28 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="deletediploma" author="apal">
+        <dropForeignKeyConstraint baseTableName="diploma" constraintName="fk_period_id"/>
+        <dropForeignKeyConstraint baseTableName="diploma" constraintName="fk_student_id"/>
+        <dropForeignKeyConstraint baseTableName="diploma" constraintName="fk_teacher_1"/>
+
+        <addForeignKeyConstraint baseTableName="diploma" baseColumnNames="id_period"
+                                 constraintName="fk_period_id"
+                                 referencedTableName="period" referencedColumnNames="period_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+
+        <addForeignKeyConstraint baseTableName="diploma" baseColumnNames="student_id"
+                                 constraintName="fk_student_id"
+                                 referencedTableName="users" referencedColumnNames="user_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+
+        <addForeignKeyConstraint baseTableName="diploma" baseColumnNames="teacher_id"
+                                 constraintName="fk_teacher_id"
+                                 referencedTableName="users" referencedColumnNames="user_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
+
 </databaseChangeLog>
