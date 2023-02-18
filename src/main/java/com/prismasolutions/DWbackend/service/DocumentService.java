@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DocumentService {
 
-    void delete(Long id);
+    Long delete(Long id);
     List<DocumentResponseDto> getAllDocumentsByYear();
 
 }

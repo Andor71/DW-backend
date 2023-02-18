@@ -1,11 +1,12 @@
 package com.prismasolutions.DWbackend.service;
 
+import com.prismasolutions.DWbackend.dto.document.DocumentDto;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileStorageService {
 
-    String storeFile(MultipartFile file, Long yearID);
+    DocumentDto storeFile(MultipartFile file, Long yearID);
 
     Resource loadFile(String fileName);
 

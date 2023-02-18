@@ -1,10 +1,12 @@
 package com.prismasolutions.DWbackend.service;
 
 import com.prismasolutions.DWbackend.config.FileStorageProperties;
+import com.prismasolutions.DWbackend.dto.document.DocumentDto;
 import com.prismasolutions.DWbackend.entity.DocumentEntity;
 import com.prismasolutions.DWbackend.entity.YearEntity;
 import com.prismasolutions.DWbackend.exception.FileStorageException;
 import com.prismasolutions.DWbackend.exception.MyFileNotFoundException;
+import com.prismasolutions.DWbackend.mapper.DocumentMapper;
 import com.prismasolutions.DWbackend.repository.DocumentRepository;
 import com.prismasolutions.DWbackend.repository.YearRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +32,15 @@ public class FileStorageServiceImpl implements FileStorageService{
     @Autowired
     private final YearRepository yearRepository;
 
+    @Autowired
+    private final DocumentMapper documentMapper;
 
 
     @Autowired
-    public FileStorageServiceImpl(FileStorageProperties fileStorageProperties, DocumentRepository documentRepository, YearRepository yearRepository) {
+    public FileStorageServiceImpl(FileStorageProperties fileStorageProperties, DocumentRepository documentRepository, YearRepository yearRepository, DocumentMapper documentMapper) {
         this.documentRepository = documentRepository;
         this.yearRepository = yearRepository;
+        this.documentMapper = documentMapper;
         try {
             this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                     .toAbsolutePath().normalize();
@@ -45,7 +50,7 @@ public class FileStorageServiceImpl implements FileStorageService{
         }
     }
     @Override
-    public String storeFile(MultipartFile file, Long yearID) {
+    public DocumentDto storeFile(MultipartFile file, Long yearID) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if(fileName.contains("..")) {
@@ -77,7 +82,7 @@ public class FileStorageServiceImpl implements FileStorageService{
             }
 
 
-            return fileName;
+            return documentMapper.toDto(documentEntity);
         } catch (Exception ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!");
         }

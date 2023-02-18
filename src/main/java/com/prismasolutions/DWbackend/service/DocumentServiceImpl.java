@@ -26,7 +26,7 @@ public class DocumentServiceImpl implements DocumentService{
     private final DocumentMapper documentMapper;
     private final YearMapper yearMapper;
     @Override
-    public void delete(Long id) {
+    public Long delete(Long id) {
         if(id == null){
             throw new IllegalArgumentException("Id cannot be null!");
         }
@@ -38,6 +38,8 @@ public class DocumentServiceImpl implements DocumentService{
         }
 
         documentRepository.delete(documentEntity.get());
+
+        return id;
     }
 
     @Override

@@ -42,8 +42,8 @@ public class DocumentController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         try {
-            documentService.delete(id);
-            return ResponseEntity.ok().build();
+
+            return ResponseEntity.ok().body(  documentService.delete(id));
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
@@ -53,26 +53,17 @@ public class DocumentController {
     @PostMapping("/uploadFile/{yearID}")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,@PathVariable Long yearID) {
         try{
-
-            String fileName = fileStorageService.storeFile(file,yearID);
-
-            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/downloadFile/")
-                    .path(fileName)
-                    .toUriString();
-
-            return ResponseEntity.ok().body(fileDownloadUri);
-
+            return ResponseEntity.ok().body( fileStorageService.storeFile(file,yearID));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
 
-    @PostMapping("/uploadMultipleFiles/{periodId}")
-    public List<ResponseEntity<?>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@PathVariable Long periodId ) {
+    @PostMapping("/uploadMultipleFiles/{yearID}")
+    public List<ResponseEntity<?>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@PathVariable Long yearID ) {
         return Arrays.asList(files)
                 .stream()
-                .map(file -> uploadFile(file,periodId))
+                .map(file -> uploadFile(file,yearID))
                 .collect(Collectors.toList());
     }
 
