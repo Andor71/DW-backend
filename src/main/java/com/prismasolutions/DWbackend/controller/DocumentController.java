@@ -1,6 +1,7 @@
 package com.prismasolutions.DWbackend.controller;
 
 
+import com.prismasolutions.DWbackend.dto.document.DocumentDto;
 import com.prismasolutions.DWbackend.dto.errorResponse.ErrorResponseDto;
 import com.prismasolutions.DWbackend.service.DocumentService;
 import com.prismasolutions.DWbackend.service.FileStorageService;
@@ -16,7 +17,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,13 +63,19 @@ public class DocumentController {
     }
 
     @PostMapping("/uploadMultipleFiles/{yearID}")
-    public List<ResponseEntity<?>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@PathVariable Long yearID ) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file,yearID))
-                .collect(Collectors.toList());
-    }
+    public ResponseEntity<?> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@PathVariable Long yearID ) {
+        try {
 
+            List<DocumentDto> documentDtos = new ArrayList<>();
+            for(MultipartFile file : files){
+                    documentDtos.add( fileStorageService.storeFile(file,yearID));
+            }
+            return ResponseEntity.ok().body(documentDtos);
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<?> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
 
