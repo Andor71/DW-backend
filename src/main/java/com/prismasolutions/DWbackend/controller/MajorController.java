@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @AllArgsConstructor
 public class MajorController {
-
     private final MajorService majorService;
-
     @GetMapping("/get-all-without-period")
     public ResponseEntity<?> getAllWithoutPeriod(){
         try {
@@ -25,24 +23,4 @@ public class MajorController {
 
         }
     }
-
-    @GetMapping("/get-all")
-    public ResponseEntity<?> getAllMajors(){
-        try {
-            return ResponseEntity.ok().body(majorService.getAll());
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
-
-        }
-    }
-    @PostMapping("/create")
-    public ResponseEntity<?> create(){
-        try {
-            return ResponseEntity.ok().body(majorService.create());
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
-
-        }
-    }
-
 }

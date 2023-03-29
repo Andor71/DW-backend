@@ -17,7 +17,6 @@ public class MajorMapper {
         MajorDto majorDto = new MajorDto();
 
         majorDto.setMajorId(majorEntity.getMajorId());
-        majorDto.setYear(yearMapper.toDto(majorEntity.getYear()));
         majorDto.setProgramme(majorEntity.getProgramme());
         majorDto.setDiplomaType(majorEntity.getDiplomaType());
 
@@ -31,7 +30,6 @@ public class MajorMapper {
     public MajorEntity toEntity(MajorDto majorDto){
         MajorEntity majorEntity = new MajorEntity();
 
-        majorEntity.setYear(yearMapper.toEntity(majorDto.getYear()));
         majorEntity.setMajorId(majorDto.getMajorId());
         majorEntity.setProgramme(majorDto.getProgramme());
         majorEntity.setDiplomaType(majorDto.getDiplomaType());

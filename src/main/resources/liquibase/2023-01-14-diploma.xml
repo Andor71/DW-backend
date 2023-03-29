@@ -54,4 +54,13 @@
                                  onUpdate="RESTRICT"/>
     </changeSet>
 
+    <changeSet id="add columns" author="apal">
+        <addColumn tableName="diploma">
+            <column name="bibliography" type="text"/>
+            <column name="details" type="text"/>
+            <column name="necessary_knowledge" type="text"/>
+            <column name="different_expectations" type="text"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

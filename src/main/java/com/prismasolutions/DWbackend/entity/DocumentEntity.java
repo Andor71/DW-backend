@@ -23,5 +23,4 @@ public class DocumentEntity{
 
     @Column(name = "path", length = 64)
     private String path;
-
 }

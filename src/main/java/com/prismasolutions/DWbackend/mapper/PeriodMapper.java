@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class PeriodMapper {
 
     private final MajorMapper majorMapper;
+    private final YearMapper yearMapper;
 
     public PeriodDto toDto(PeriodEntity periodEntity){
         PeriodDto periodDto = new PeriodDto();
@@ -31,6 +32,9 @@ public class PeriodMapper {
         periodDto.setDiplomaDefend(periodEntity.getDiplomaDefend());
         if(periodEntity.getMajor() != null){
             periodDto.setMajor(majorMapper.toDto(periodEntity.getMajor()));
+        }
+        if(periodEntity.getYear() != null){
+            periodDto.setYear(yearMapper.toDto(periodEntity.getYear()));
         }
         return periodDto;
     }
@@ -54,7 +58,7 @@ public class PeriodMapper {
         periodEntity.setDiplomaDefend(periodDto.getDiplomaDefend());
 
         periodEntity.setMajor(majorMapper.toEntity(periodDto.getMajor()));
-
+        periodEntity.setYear(yearMapper.toEntity(periodDto.getYear()));
         return periodEntity;
     }
     public List<PeriodEntity> toEntityList(List<PeriodDto> periodDtos){

@@ -1,0 +1,28 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-year-student_diploma_mapping" author="apal">
+        <createTable tableName="finished_student_diploma_mapping">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="FK_STUDENT_ID" type="bigint"/>
+            <column name="FK_DIPLOMA_ID" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="finished_student_diploma_mapping" baseColumnNames="FK_STUDENT_ID"
+                                 constraintName="fk_student_id"
+                                 referencedTableName="users" referencedColumnNames="user_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+
+        <addForeignKeyConstraint baseTableName="finished_student_diploma_mapping" baseColumnNames="FK_DIPLOMA_ID"
+                                 constraintName="fk_diploma_id"
+                                 referencedTableName="diploma" referencedColumnNames="diploma_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
+</databaseChangeLog>

@@ -24,11 +24,11 @@ public class CommentEntity {
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_id"))
     private UserEntity user;
-
     @Column(name = "score")
     private Integer score;
-
     @Column(name = "date")
     private Date date;
+    @Column(name = "viewed")
+    private Boolean viewed;
 
 }

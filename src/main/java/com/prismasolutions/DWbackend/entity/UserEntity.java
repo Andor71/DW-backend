@@ -36,4 +36,7 @@ public class UserEntity {
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "major_id", foreignKey = @ForeignKey(name = "fk_teacher_mapping_id"))
     private MajorEntity major;
+
+    @Column(name="media")
+    private Double media;
 }

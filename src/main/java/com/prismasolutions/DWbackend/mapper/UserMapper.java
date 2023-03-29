@@ -2,14 +2,21 @@ package com.prismasolutions.DWbackend.mapper;
 
 import com.prismasolutions.DWbackend.dto.user.UserDto;
 import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
+import com.prismasolutions.DWbackend.entity.MajorEntity;
 import com.prismasolutions.DWbackend.entity.UserEntity;
+import com.prismasolutions.DWbackend.repository.MajorRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@AllArgsConstructor
 public class UserMapper {
+
+    private final MajorRepository majorRepository;
+    private final MajorMapper majorMapper;
 
     public UserEntity toEntity(UserDto userDto){
         UserEntity userEntity = new UserEntity();
@@ -39,6 +46,11 @@ public class UserMapper {
         userResponseDto.setEmail(userEntity.getEmail());
         userResponseDto.setRole(userEntity.getRole());
         userResponseDto.setActive(userEntity.getActive());
+        userResponseDto.setMedia(userEntity.getMedia());
+        if(userEntity.getMajor() != null){
+            userResponseDto.setMajorDto(majorMapper.toDto(userEntity.getMajor()));
+        }
+
 
         return userResponseDto;
     }

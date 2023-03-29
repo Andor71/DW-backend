@@ -1,6 +1,7 @@
 package com.prismasolutions.DWbackend.service;
 
 
+import com.prismasolutions.DWbackend.dto.period.PeriodByYearDto;
 import com.prismasolutions.DWbackend.dto.period.PeriodDto;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface PeriodService {
     Long delete(Long id);
 
     PeriodDto getById(Long id);
+
+    List<PeriodByYearDto> getAllPeriodsByYear();
 }

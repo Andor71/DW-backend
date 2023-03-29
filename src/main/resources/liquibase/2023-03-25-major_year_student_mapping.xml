@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_major_year_student_mapping" author="apal">
+        <createTable tableName="major_year_student_mapping">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fk_major_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_year_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_student_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="major_year_student_mapping" baseColumnNames="fk_major_id" constraintName="fk_major_id"
+                                 referencedTableName="major"
+                                 referencedColumnNames="major_id"
+                                 onDelete="CASCADE"
+                       />
+        <addForeignKeyConstraint baseTableName="major_year_student_mapping" baseColumnNames="fk_year_id" constraintName="fk_year_id"
+                                 referencedTableName="year"
+                                 referencedColumnNames="year_id"
+                                 onDelete="CASCADE"
+        />
+        <addForeignKeyConstraint baseTableName="major_year_student_mapping" baseColumnNames="fk_student_id" constraintName="fk_student_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 onDelete="CASCADE"
+        />
+
+    </changeSet>
+
+</databaseChangeLog>

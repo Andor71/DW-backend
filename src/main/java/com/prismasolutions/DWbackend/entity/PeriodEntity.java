@@ -19,6 +19,10 @@ public class PeriodEntity {
     @JoinColumn(name = "fk_major_id")
     private MajorEntity major;
 
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "fk_year_id")
+    private YearEntity year;
+
     @Column(name = "start_of_entering_topics")
     private Date startOfEnteringTopics;
 

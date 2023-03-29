@@ -23,4 +23,12 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="addingyearcolumn" author="apal">
+        <addColumn tableName="period">
+            <column name="fk_year_id" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="period" baseColumnNames="fk_year_id" constraintName="fk_year_id"
+                                 referencedTableName="year"
+                                 referencedColumnNames="year_id"
+                                 onDelete="CASCADE"/>    </changeSet>
 </databaseChangeLog>

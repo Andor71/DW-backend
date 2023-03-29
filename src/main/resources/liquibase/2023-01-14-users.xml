@@ -30,4 +30,9 @@
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"/>
     </changeSet>
+    <changeSet id="addingmediafield" author="apal">
+        <addColumn tableName="users">
+            <column name="media" type="double"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

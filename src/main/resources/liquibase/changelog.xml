@@ -14,6 +14,8 @@
     <include file="liquibase/2023-01-14-teacher_diploma_mapping.xml" />
     <include file="liquibase/2023-01-14-comment.xml" />
     <include file="liquibase/2023-01-14-document.xml"/>
-
+    <include file="liquibase/2023-03-14-student_diploma_mapping.xml"/>
+    <include file="liquibase/2023-03-06-finished-student-diploma-mapping.xml"/>
+    <include file="liquibase/2023-03-25-major_year_student_mapping.xml"/>
 
 </databaseChangeLog>

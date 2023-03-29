@@ -1,6 +1,7 @@
 package com.prismasolutions.DWbackend.dto.period;
 
 import com.prismasolutions.DWbackend.dto.major.MajorDto;
+import com.prismasolutions.DWbackend.dto.year.YearDto;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,7 +10,7 @@ import java.util.Date;
 public class PeriodDto {
     private Long periodId;
     private MajorDto major;
-
+    private YearDto year;
     private Date startOfEnteringTopics;
 
     private Date endOfEnteringTopics;

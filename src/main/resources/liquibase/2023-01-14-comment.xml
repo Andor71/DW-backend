@@ -36,4 +36,12 @@
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"/>
     </changeSet>
+    <changeSet id="changedtetotimestep" author="apal">
+        <modifyDataType tableName="comment" columnName="date" newDataType="timestamp"/>
+    </changeSet>
+    <changeSet id="addchackedcolumn" author="apal">
+        <addColumn tableName="comment">
+            <column name="viewed" type="bool"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

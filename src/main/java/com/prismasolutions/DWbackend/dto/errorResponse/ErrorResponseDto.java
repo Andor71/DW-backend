@@ -1,8 +1,7 @@
 package com.prismasolutions.DWbackend.dto.errorResponse;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
-public class ErrorResponseDto {
-    String errrorMessage;
+public class ErrorResponseDto extends Exception{
+    public ErrorResponseDto(String errorMessage) {
+        super(errorMessage);
+    }
 }

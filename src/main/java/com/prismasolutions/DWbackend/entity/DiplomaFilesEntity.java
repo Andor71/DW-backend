@@ -30,4 +30,8 @@ public class DiplomaFilesEntity {
     @Column(name = "visibility")
     private Integer visibility;
 
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "author", foreignKey = @ForeignKey(name = "fk_author_id"))
+    private UserEntity author;
+
 }

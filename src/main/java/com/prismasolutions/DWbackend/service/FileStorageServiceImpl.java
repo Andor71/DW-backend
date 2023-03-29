@@ -70,15 +70,16 @@ public class FileStorageServiceImpl implements FileStorageService{
             DocumentEntity documentEntity = documentRepository.findByNameAndYear_Id(fileName,yearEntity.get().getId());
 
             if(documentEntity != null){
+
                 documentEntity.setName(fileName);
                 documentEntity.setYear(yearEntity.get());
-                documentRepository.save(documentEntity);
+                documentEntity = documentRepository.save(documentEntity);
 
             }else{
                 DocumentEntity document = new DocumentEntity();
                 document.setName(fileName);
                 document.setYear(yearEntity.get());
-                documentRepository.save(document);
+                documentEntity = documentRepository.save(document);
             }
 
 

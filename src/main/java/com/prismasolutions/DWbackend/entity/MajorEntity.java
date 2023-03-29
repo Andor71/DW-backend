@@ -16,10 +16,6 @@ public class MajorEntity {
     @Column(name = "major_id")
     private Long majorId;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "fk_year_id")
-    private YearEntity year;
-
     @Column(name = "programme")
     private String programme;
 

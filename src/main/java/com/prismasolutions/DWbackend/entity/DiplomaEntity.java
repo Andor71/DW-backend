@@ -19,7 +19,7 @@ public class DiplomaEntity {
     private String title;
 
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "period_id")
+    @JoinColumn(name = "id_period")
     private PeriodEntity period;
 
     @ManyToOne(cascade = CascadeType.DETACH)
@@ -53,4 +53,15 @@ public class DiplomaEntity {
 
     @Column(name = "description", columnDefinition = "text")
     private String description;
+
+    @Column(name = "details")
+    private String details;
+    @Column(name="necessary_knowledge")
+    private String necessaryKnowledge;
+
+    @Column(name = "different_expectations")
+    private String differentExpectations;
+
+    @Column(name="bibliography")
+    private String bibliography;
 }

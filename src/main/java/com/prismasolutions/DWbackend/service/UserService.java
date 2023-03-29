@@ -1,10 +1,12 @@
 package com.prismasolutions.DWbackend.service;
 
 import com.prismasolutions.DWbackend.dto.user.UserDto;
+import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
 import com.prismasolutions.DWbackend.repository.UserRepository;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 
 public interface UserService {
     /**
@@ -67,5 +69,11 @@ public interface UserService {
      * @return The {@link UserDto}
      */
     UserDto getCurrentUserDto();
+
+    UserResponseDto getById(Long id);
+
+    List<UserResponseDto> getAll();
+
+    List<UserResponseDto> getAllActiveStudents();
 
 }

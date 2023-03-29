@@ -79,5 +79,11 @@
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"/>
     </changeSet>
+    <changeSet id="dropfkyearid" author="apal">
+        <dropColumn tableName="major" columnName="fk_year_id" />
+    </changeSet>
+    <changeSet id="dropyear" author="apal">
+        <dropColumn tableName="major" columnName="year"/>
+    </changeSet>
 
 </databaseChangeLog>

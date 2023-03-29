@@ -1,15 +1,21 @@
 package com.prismasolutions.DWbackend.service;
 
+import com.prismasolutions.DWbackend.dto.major.AllMajorDto;
+import com.prismasolutions.DWbackend.dto.period.PeriodByYearDto;
 import com.prismasolutions.DWbackend.dto.period.PeriodDto;
+import com.prismasolutions.DWbackend.dto.year.YearDto;
 import com.prismasolutions.DWbackend.entity.MajorEntity;
 import com.prismasolutions.DWbackend.entity.PeriodEntity;
 import com.prismasolutions.DWbackend.mapper.PeriodMapper;
+import com.prismasolutions.DWbackend.mapper.YearMapper;
 import com.prismasolutions.DWbackend.repository.MajorRepository;
 import com.prismasolutions.DWbackend.repository.PeriodRepository;
+import com.prismasolutions.DWbackend.repository.YearRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +26,8 @@ public class PeriodServiceImpl implements PeriodService{
     private final PeriodRepository periodRepository;
     private final PeriodMapper periodMapper;
 
+    private final YearMapper yearMapper;
+    private final YearRepository yearRepository;
     private final MajorRepository majorRepository;
 
     @Override
@@ -127,5 +135,24 @@ public class PeriodServiceImpl implements PeriodService{
         }
 
         return periodMapper.toDto(periodEntityOptional.get());
+    }
+
+    @Override
+    public List<PeriodByYearDto> getAllPeriodsByYear() {
+
+        List<YearDto> yearDtos = yearMapper.toDtoList(yearRepository.findAll());
+
+        ArrayList<PeriodByYearDto> periodByYearDtos = new ArrayList<>();
+
+        for(YearDto yearDto: yearDtos){
+            List<PeriodDto> periodDtos = periodMapper.toDtoList(periodRepository.findByYear_Id(yearDto.getId()));
+            PeriodByYearDto periodByYearDto = new PeriodByYearDto();
+            periodByYearDto.setPeriods(periodDtos);
+            periodByYearDto.setYear(yearDto);
+
+            periodByYearDtos.add(periodByYearDto);
+        }
+
+        return periodByYearDtos;
     }
 }

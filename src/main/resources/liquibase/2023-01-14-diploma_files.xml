@@ -27,4 +27,14 @@
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"/>
     </changeSet>
+    <changeSet id="addauthorfield" author="apal">
+        <addColumn tableName="diploma_files">
+            <column name="author" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="diploma_files" baseColumnNames="author"
+                                 constraintName="fk_author_id"
+                                 referencedTableName="users" referencedColumnNames="user_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
 </databaseChangeLog>

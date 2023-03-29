@@ -57,4 +57,14 @@ public class PeriodController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
+
+    @GetMapping("/get-all-period-by-year")
+    public ResponseEntity<?> getAllPeriodByYear(){
+        try {
+            return ResponseEntity.ok().body(periodService.getAllPeriodsByYear());
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+
 }
