@@ -1,5 +1,6 @@
 package com.prismasolutions.DWbackend.service;
 
+import com.prismasolutions.DWbackend.dto.FinishedSDMappingDto.FinishedSDMappingDto;
 import com.prismasolutions.DWbackend.dto.diploma.DiplomaDto;
 import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +21,18 @@ public interface DiplomaService {
     List<DiplomaDto> getAllAppliedDiplomas();
     void changeAppliedPriority(List<DiplomaDto> diplomaDtos,Long userID);
     DiplomaDto getByIdForStudent(Long id);
-    List<DiplomaDto> getAllDiplomaApplies();
+    List<FinishedSDMappingDto> getAllDiplomaApplies();
     void sortStudentsForDiploma();
 
     void enableStudentDiploma(Long diplomaID, Long studentID);
 
-    void enableAllStudentDiploma();
+    List<FinishedSDMappingDto> enableAllStudentDiploma(Boolean allaccepted);
 
     List<UserResponseDto> getAllStudentsApplied(Long diplomaID);
+
+    List<DiplomaDto> getAllVisibleForGivenMajor();
+
+    DiplomaDto getCurrentDiploma();
+
+    void finalizeApplies();
 }

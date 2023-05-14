@@ -4,23 +4,22 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-
-@Data
 @Entity
-@Table(name = "finished_student_diploma_mapping")
-public class FinishedStudentDiplomaMappingEntity {
+@Table(name = "diploma_period_mapping")
+@Data
+public class DiplomaPeriodMappingEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "FK_DIPLOMA_ID")
+    @JoinColumn(name = "fk_diploma_id")
     private DiplomaEntity diploma;
 
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "FK_STUDENT_ID")
-    private UserEntity student;
-    @Column(name = "accepted")
-    private Boolean accepted;
+    @JoinColumn(name = "fk_period_id")
+    private PeriodEntity period;
+
 }

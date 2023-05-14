@@ -44,6 +44,8 @@ public class PeriodEntity {
     @Column(name = "second_topic_advertisement_end")
     private Date secondTopicAdvertisementEnd;
 
+    @Column(name = "second_allocation")
+    private Date secondAllocation;
     @Column(name = "implementation_of_topics")
     private Date implementationOfTopics;
 

@@ -2,7 +2,9 @@ package com.prismasolutions.DWbackend.service;
 
 import com.prismasolutions.DWbackend.dto.user.UserDto;
 import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
+import com.prismasolutions.DWbackend.enums.PeriodEnums;
 import com.prismasolutions.DWbackend.repository.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -76,4 +78,15 @@ public interface UserService {
 
     List<UserResponseDto> getAllActiveStudents();
 
+    List<UserResponseDto> getAllTeachers();
+
+    UserResponseDto createStudent(UserResponseDto userResponseDto);
+
+    UserResponseDto updateStudent(UserResponseDto userResponseDto);
+
+    void deleteStudent(Long id);
+
+    List<UserResponseDto> createStudentsViaFile(MultipartFile file,Long periodID);
+
+    List<UserResponseDto> getAllStudentsForPeriod(Long periodID);
 }

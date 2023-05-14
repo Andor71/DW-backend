@@ -1,18 +1,15 @@
 package com.prismasolutions.DWbackend.service;
 
+import com.prismasolutions.DWbackend.dto.FinishedSDMappingDto.FinishedSDMappingDto;
 import com.prismasolutions.DWbackend.dto.diploma.DiplomaDto;
 import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
-import com.prismasolutions.DWbackend.entity.DiplomaEntity;
-import com.prismasolutions.DWbackend.entity.FinishedStudentDiplomaMappingEntity;
-import com.prismasolutions.DWbackend.entity.StudentDiplomaMappingEntity;
-import com.prismasolutions.DWbackend.entity.UserEntity;
+import com.prismasolutions.DWbackend.entity.*;
 import com.prismasolutions.DWbackend.exception.NoAuthority;
 import com.prismasolutions.DWbackend.mapper.DiplomaMapper;
+import com.prismasolutions.DWbackend.mapper.FinishedSDMappingMapper;
+import com.prismasolutions.DWbackend.mapper.PeriodMapper;
 import com.prismasolutions.DWbackend.mapper.UserMapper;
-import com.prismasolutions.DWbackend.repository.DiplomaRepository;
-import com.prismasolutions.DWbackend.repository.Finished_D_S_MRepository;
-import com.prismasolutions.DWbackend.repository.StudentDiplomaMappingRepository;
-import com.prismasolutions.DWbackend.repository.UserRepository;
+import com.prismasolutions.DWbackend.repository.*;
 import com.prismasolutions.DWbackend.util.Utility;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -35,7 +33,12 @@ public class DiplomaServiceImpl implements DiplomaService{
     private final UserRepository userRepository;
     private final StudentDiplomaMappingRepository studentDiplomaMappingRepository;
     private final Finished_D_S_MRepository finishedDSMRepository;
-
+    private final DiplomaPeriodMappingService diplomaPeriodMappingService;
+    private final PeriodMapper periodMapper;
+    private final DiplomaPeriodMappingRepository diplomaPeriodMappingRepository;
+    private final TeacherDiplomaMappingService teacherDiplomaMappingService;
+    private final TeacherDiplomaMappingRepository teacherDiplomaMappingRepository;
+    private final FinishedSDMappingMapper finishedSDMappingMapper;
 
     @Override
     public DiplomaDto create(MultipartFile file, DiplomaDto diplomaDto) throws IOException {
@@ -60,22 +63,34 @@ public class DiplomaServiceImpl implements DiplomaService{
                 }
             }
         }
-        if(diplomaDto.getPeriod() == null){
+        if(diplomaDto.getPeriods() == null){
             throw new IllegalArgumentException("Period cannot be null!");
         }
 
         diplomaDto.setScore(0.0);
-        diplomaDto.setStage("plan");
+        diplomaDto.setStage("Terv");
         diplomaDto.setAbstractName(file.getOriginalFilename());
 
+        DiplomaEntity diploma = diplomaRepository.save(diplomaMapper.toEntity(diplomaDto));
 
-        diplomaDto.setTeacher(userMapper.toUserResponseDto(utility.getCurrentUser()));
+        for(PeriodEntity periodEntity: periodMapper.toEntityList(diplomaDto.getPeriods())){
+            diplomaPeriodMappingService.create(diploma,periodEntity);
+        }
 
-        DiplomaEntity newDiploma = diplomaRepository.save(diplomaMapper.toEntity(diplomaDto));
+        teacherDiplomaMappingService.create(utility.getCurrentUser(),diploma);
 
-        diplomaFilesService.create(file,newDiploma.getDiplomaId());
+        if(diplomaDto.getTeachers() != null){
+            for(UserEntity userEntity : userMapper.toEntityListFromResponse(diplomaDto.getTeachers())){
+                teacherDiplomaMappingService.create(userEntity,diploma);
+            }
+        }
 
-        return diplomaMapper.toDto(newDiploma);
+        diplomaFilesService.create(file,diploma.getDiplomaId());
+
+        DiplomaDto newDiplomaDto = diplomaMapper.toDto(diploma);
+        newDiplomaDto.setPeriods(diplomaDto.getPeriods());
+
+        return newDiplomaDto;
     }
 
     @Override
@@ -89,6 +104,7 @@ public class DiplomaServiceImpl implements DiplomaService{
         if(diplomaEntity.isEmpty()){
             throw new EntityNotFoundException("Entity not found!");
         }
+
         return diplomaMapper.toDto(diplomaEntity.get());
     }
 
@@ -99,7 +115,7 @@ public class DiplomaServiceImpl implements DiplomaService{
 
     @Override
     public List<DiplomaDto> getMyDiplomas() {
-        return diplomaMapper.toDtoList(diplomaRepository.findByTeacher_Id(utility.getCurrentUser().getId()));
+        return diplomaMapper.toDtoList(teacherDiplomaMappingRepository.findByTeacher_Id(utility.getCurrentUser().getId()).stream().map( TeacherDiplomaMappingEntity::getDiploma).collect(Collectors.toList()));
     }
 
     @Override
@@ -143,17 +159,18 @@ public class DiplomaServiceImpl implements DiplomaService{
         if(diplomaDto.getTaken() == null){
             diplomaDto.setTaken(false);
         }
-        if(diplomaDto.getPeriod() == null){
-            throw new IllegalArgumentException("Period cannot be null!");
-        }
-
-
 
         if(file != null){
             diplomaFilesService.update(file,diplomaDto.getDiplomaId());
             diplomaDto.setAbstractName(file.getOriginalFilename());
         }
         DiplomaEntity updatedDiploma = diplomaRepository.save(diplomaMapper.toEntity(diplomaDto));
+
+        diplomaPeriodMappingRepository.deleteByDiploma(updatedDiploma);
+
+        for(PeriodEntity periodEntity: periodMapper.toEntityList(diplomaDto.getPeriods())){
+            diplomaPeriodMappingService.create(updatedDiploma,periodEntity);
+        }
 
         return diplomaMapper.toDto(updatedDiploma);
     }
@@ -271,16 +288,8 @@ public class DiplomaServiceImpl implements DiplomaService{
     }
 
     @Override
-    public List<DiplomaDto> getAllDiplomaApplies() {
-        List<DiplomaDto> diplomaDtos =diplomaMapper.toDtoList(diplomaRepository.findByStudentNotNull()) ;
-        for(DiplomaDto diplomaDto: diplomaDtos){
-            if(finishedDSMRepository.existsByDiploma_DiplomaIdAndStudent_Id(diplomaDto.getDiplomaId(),diplomaDto.getStudent().getId())){
-                diplomaDto.setEnabled(true);
-            }else{
-                diplomaDto.setEnabled(false);
-            }
-        }
-        return diplomaDtos;
+    public List<FinishedSDMappingDto> getAllDiplomaApplies() {
+        return finishedSDMappingMapper.toDtoList(finishedDSMRepository.findAll());
     }
 
     @Override
@@ -295,10 +304,12 @@ public class DiplomaServiceImpl implements DiplomaService{
         for(UserEntity student : students){
             List<StudentDiplomaMappingEntity> studentDiplomaMappingEntities = studentDiplomaMappingRepository.findByStudent_IdOrderByPriorityAsc(student.getId());
             for(StudentDiplomaMappingEntity mapping : studentDiplomaMappingEntities){
-                if(mapping.getDiploma().getStudent() == null){
-                    DiplomaEntity diloma = mapping.getDiploma();
-                    diloma.setStudent(student);
-                    diplomaRepository.save(diloma);
+                if(!finishedDSMRepository.existsByDiploma_DiplomaId(mapping.getDiploma().getDiplomaId())){
+                    FinishedStudentDiplomaMappingEntity fsdme = new FinishedStudentDiplomaMappingEntity();
+                    fsdme.setStudent(student);
+                    fsdme.setDiploma(mapping.getDiploma());
+                    fsdme.setAccepted(false);
+                    finishedDSMRepository.save(fsdme);
                     break;
                 }
             }
@@ -327,33 +338,25 @@ public class DiplomaServiceImpl implements DiplomaService{
             throw new IllegalArgumentException("No diploma mapping found!");
         }
 
-        FinishedStudentDiplomaMappingEntity finishedStudentDiplomaMappingEntity = new FinishedStudentDiplomaMappingEntity();
-        finishedStudentDiplomaMappingEntity.setDiploma(diplomaEntity);
-        finishedStudentDiplomaMappingEntity.setStudent(userEntity);
-//        System.out.println(finishedDSMRepository.existsByDiploma_DiplomaIdAndStudent_Id(diplomaID,studentID));
-        if(!finishedDSMRepository.existsByDiploma_DiplomaIdAndStudent_Id(diplomaID,studentID)){
-            finishedDSMRepository.save(finishedStudentDiplomaMappingEntity);
-        }else{
-            finishedStudentDiplomaMappingEntity = finishedDSMRepository.findByDiploma_DiplomaIdAndStudent_Id(diplomaID,studentID);
-            finishedDSMRepository.delete(finishedStudentDiplomaMappingEntity);
-        }
+        FinishedStudentDiplomaMappingEntity entity = finishedDSMRepository.findByDiploma_DiplomaIdAndStudent_Id(diplomaEntity.getDiplomaId(),userEntity.getId()).orElseThrow(()->{
+            throw new EntityNotFoundException("Entity not found!");
+        });
+
+        entity.setAccepted(!entity.getAccepted());
+
+        finishedDSMRepository.save(entity);
     }
 
     @Override
-    public void enableAllStudentDiploma() {
+    public List<FinishedSDMappingDto> enableAllStudentDiploma(Boolean allaccepted) {
         if(!utility.getCurrentUser().getRole().equals("departmenthead")){
             throw new NoAuthority("You have no authority for this action!");
         }
-
-        List<DiplomaEntity> diplomaEntities = diplomaRepository.findByStudentNotNull();
-
-        for(DiplomaEntity diplomaEntity: diplomaEntities){
-            FinishedStudentDiplomaMappingEntity finishedStudentDiplomaMappingEntity = new FinishedStudentDiplomaMappingEntity();
-            finishedStudentDiplomaMappingEntity.setDiploma(diplomaEntity);
-            finishedStudentDiplomaMappingEntity.setStudent(diplomaEntity.getStudent());
-            finishedDSMRepository.save(finishedStudentDiplomaMappingEntity);
+        List<FinishedStudentDiplomaMappingEntity> entities = finishedDSMRepository.findAll();
+        for(FinishedStudentDiplomaMappingEntity entity : entities){
+            entity.setAccepted(!allaccepted);
         }
-
+        return finishedSDMappingMapper.toDtoList(finishedDSMRepository.saveAll(entities));
     }
 
     @Override
@@ -369,4 +372,51 @@ public class DiplomaServiceImpl implements DiplomaService{
         }
         return userResponseDtos;
     }
+
+    @Override
+    public List<DiplomaDto> getAllVisibleForGivenMajor() {
+
+        List<DiplomaDto> diplomas = new ArrayList<>();
+
+        List<DiplomaEntity> diplomaEntities = diplomaRepository.findByStudentNull();
+
+        for(DiplomaEntity diplomaEntity:diplomaEntities){
+            if(diplomaPeriodMappingRepository.existsByDiploma_DiplomaIdAndPeriod_Major_MajorId(diplomaEntity.getDiplomaId(),utility.getCurrentUser().getMajor().getMajorId())){
+                diplomas.add(diplomaMapper.toDto(diplomaEntity));
+            }
+        }
+
+        return diplomas;
+    }
+
+    @Override
+    public DiplomaDto getCurrentDiploma() {
+       DiplomaEntity diplomaEntity= diplomaRepository.findByStudent_Id(utility.getCurrentUser().getId());
+       if(diplomaEntity == null){
+           throw new NoAuthority("No diploma found for this id");
+       }
+        return diplomaMapper.toDto(diplomaEntity);
+    }
+
+    @Override
+    public void finalizeApplies() {
+        if(!utility.getCurrentUser().getRole().equals("departmenthead")){
+            throw new NoAuthority("You have no authority for this action!");
+        }
+
+        List<FinishedStudentDiplomaMappingEntity> fsdme = finishedDSMRepository.findAll();
+
+        for(FinishedStudentDiplomaMappingEntity entity : fsdme){
+            if(entity.getAccepted()){
+                UserEntity user = entity.getStudent();
+                DiplomaEntity diploma = entity.getDiploma();
+                diploma.setStudent(user);
+                diplomaRepository.save(diploma);
+            }
+        }
+
+        finishedDSMRepository.deleteAll();;
+    }
+
+
 }

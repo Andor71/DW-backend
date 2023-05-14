@@ -9,16 +9,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
 import java.time.Period;
+import java.util.List;
 
 @Data
 public class DiplomaDto {
     private Long diplomaId;
     private String title;
-    private PeriodDto period;
+    private List<PeriodDto> periods;
     private UserResponseDto student;
     private Double score;
     private String stage;
-    private UserResponseDto teacher;
     private Integer visibility;
     private String keywords;
     private String type;
@@ -31,4 +31,5 @@ public class DiplomaDto {
     private String details;
     private String necessaryKnowledge;
     private String differentExpectations;
+    private List<UserResponseDto> teachers;
 }

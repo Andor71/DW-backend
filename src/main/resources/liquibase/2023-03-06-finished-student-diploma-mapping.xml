@@ -25,4 +25,9 @@
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"/>
     </changeSet>
+    <changeSet id="adding_accepted_field" author="apal">
+        <addColumn tableName="finished_student_diploma_mapping">
+            <column name="accepted" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

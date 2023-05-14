@@ -14,4 +14,5 @@ public class UserResponseDto {
     private Boolean active;
     private Double media;
     private MajorDto majorDto;
+    private Integer status;
 }

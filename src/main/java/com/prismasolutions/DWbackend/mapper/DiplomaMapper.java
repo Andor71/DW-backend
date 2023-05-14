@@ -1,14 +1,16 @@
 package com.prismasolutions.DWbackend.mapper;
 
 import com.prismasolutions.DWbackend.dto.diploma.DiplomaDto;
-import com.prismasolutions.DWbackend.entity.DiplomaEntity;
-import com.prismasolutions.DWbackend.entity.UserEntity;
+import com.prismasolutions.DWbackend.entity.*;
+import com.prismasolutions.DWbackend.repository.DiplomaPeriodMappingRepository;
 import com.prismasolutions.DWbackend.repository.PeriodRepository;
+import com.prismasolutions.DWbackend.repository.TeacherDiplomaMappingRepository;
 import com.prismasolutions.DWbackend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,12 +18,12 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class DiplomaMapper {
-
-    private final PeriodMapper periodMapper;
-    private final PeriodRepository periodRepository;
+    private final TeacherDiplomaMappingRepository teacherDiplomaMappingRepository;
+    private final DiplomaPeriodMappingRepository diplomaPeriodMappingRepository;
     private final UserRepository userRepository;
-
     private final UserMapper userMapper;
+    private final PeriodMapper periodMapper;
+
     public DiplomaDto toDto(DiplomaEntity diplomaEntity){
         DiplomaDto diplomaDto = new DiplomaDto();
 
@@ -38,15 +40,28 @@ public class DiplomaMapper {
         diplomaDto.setDetails(diplomaEntity.getDetails());
         diplomaDto.setNecessaryKnowledge(diplomaEntity.getNecessaryKnowledge());
         diplomaDto.setDifferentExpectations(diplomaEntity.getDifferentExpectations());
-        diplomaDto.setPeriod(periodMapper.toDto(diplomaEntity.getPeriod()));
-        diplomaDto.setBibliography(diplomaEntity.getBibliography());
-        if(diplomaEntity.getTeacher() != null){
-            diplomaDto.setTeacher(userMapper.toUserResponseDto(diplomaEntity.getTeacher()));
-        }
 
         if(diplomaEntity.getStudent() != null){
             diplomaDto.setStudent(userMapper.toUserResponseDto(diplomaEntity.getStudent()));
         }
+
+        List<TeacherDiplomaMappingEntity> teacherDiplomaMappingEntities = teacherDiplomaMappingRepository.findByDiploma_DiplomaId(diplomaEntity.getDiplomaId());
+
+        List<UserEntity> teachers = new ArrayList<>();
+        for(TeacherDiplomaMappingEntity teacherDiplomaMappingEntity: teacherDiplomaMappingEntities){
+            teachers.add(teacherDiplomaMappingEntity.getTeacher());
+        }
+        diplomaDto.setTeachers(userMapper.toUserResponseList(teachers));
+
+        List<DiplomaPeriodMappingEntity> diplomaPeriodMappingEntitys = diplomaPeriodMappingRepository.findByDiploma_DiplomaId(diplomaEntity.getDiplomaId());
+
+        List<PeriodEntity> periods = new ArrayList<>();
+        for(DiplomaPeriodMappingEntity diplomaPeriodMappingEntity: diplomaPeriodMappingEntitys){
+            periods.add(diplomaPeriodMappingEntity.getPeriod());
+        }
+
+        diplomaDto.setPeriods(periodMapper.toDtoList(periods));
+
 
         return diplomaDto;
     }
@@ -74,19 +89,9 @@ public class DiplomaMapper {
         diplomaEntity.setNecessaryKnowledge(diplomaDto.getNecessaryKnowledge());
         diplomaEntity.setDifferentExpectations(diplomaDto.getDifferentExpectations());
         diplomaEntity.setBibliography(diplomaDto.getBibliography());
-        diplomaEntity.setPeriod(periodMapper.toEntity(diplomaDto.getPeriod()));
-
-
-        if(diplomaDto.getTeacher() != null){
-            Optional<UserEntity> user = userRepository.findById(diplomaDto.getTeacher().getId());
-            if(user.isEmpty()){
-                throw new EntityNotFoundException("No user found with provided id at create course!");
-            }
-            diplomaEntity.setTeacher(user.get());
-        }
 
         if(diplomaDto.getStudent() != null){
-            Optional<UserEntity> user = userRepository.findById(diplomaDto.getTeacher().getId());
+            Optional<UserEntity> user = userRepository.findById(diplomaDto.getStudent().getId());
             if(user.isEmpty()){
                 throw new EntityNotFoundException("No user found with provided id at create course!");
             }

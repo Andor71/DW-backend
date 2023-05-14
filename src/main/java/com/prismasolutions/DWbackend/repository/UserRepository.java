@@ -22,6 +22,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Modifying(clearAutomatically = true)
     @Query( value ="SELECT * FROM users WHERE user_id IN ( SELECT fk_student_id  FROM student_diploma_mapping )",nativeQuery = true)
     List<UserEntity> getAllUsersFromDiplomaMapping();
+    List<UserEntity> findByRoleOrRole(String role, String role1);
+
+    List<UserEntity> findByRoleOrRoleAndIdNot(String role, String role1, Long id);
 
 
 }

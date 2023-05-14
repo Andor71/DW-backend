@@ -6,6 +6,7 @@ import com.prismasolutions.DWbackend.entity.MajorEntity;
 import com.prismasolutions.DWbackend.entity.UserEntity;
 import com.prismasolutions.DWbackend.repository.MajorRepository;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.jni.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class UserMapper {
         userEntity.setRole(userDto.getRole());
         userEntity.setPassword(userDto.getPassword());
         userEntity.setActive(userDto.getActive());
+        userEntity.setStatus(userDto.getStatus());
 
         return userEntity;
     }
@@ -47,6 +49,7 @@ public class UserMapper {
         userResponseDto.setRole(userEntity.getRole());
         userResponseDto.setActive(userEntity.getActive());
         userResponseDto.setMedia(userEntity.getMedia());
+        userResponseDto.setStatus(userEntity.getStatus());
         if(userEntity.getMajor() != null){
             userResponseDto.setMajorDto(majorMapper.toDto(userEntity.getMajor()));
         }
@@ -67,14 +70,34 @@ public class UserMapper {
         userDto.setImage(userEntity.getUserImage());
         userDto.setEmail(userEntity.getEmail());
         userDto.setRole(userEntity.getRole());
-        userDto.setPassword(userEntity.getPassword());
         userDto.setActive(userEntity.getActive());
+        userDto.setStatus(userEntity.getStatus());
 
         return userDto;
     }
 
     public List<UserDto> toDtoList(List<UserEntity> userDtos){
         return userDtos.stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    public UserEntity toEntityFromResponse(UserResponseDto userResponseDto){
+        UserEntity userEntity = new UserEntity();
+
+        userEntity.setId(userResponseDto.getId());
+        userEntity.setFirstName(userResponseDto.getFirstName());
+        userEntity.setLastName(userResponseDto.getLastName());
+        userEntity.setEmail(userResponseDto.getEmail());
+        userEntity.setRole(userResponseDto.getRole());
+        userEntity.setActive(userResponseDto.getActive());
+        userEntity.setMedia(userResponseDto.getMedia());
+        userEntity.setStatus(userResponseDto.getStatus());
+        if(userEntity.getMajor() != null){
+            userEntity.setMajor(majorMapper.toEntity(userResponseDto.getMajorDto()));
+        }
+        return userEntity;
+    }
+    public List<UserEntity> toEntityListFromResponse(List<UserResponseDto> userResponseDtos){
+        return userResponseDtos.stream().map(this::toEntityFromResponse).collect(Collectors.toList());
     }
 
 }

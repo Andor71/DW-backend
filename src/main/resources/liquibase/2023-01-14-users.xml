@@ -35,4 +35,12 @@
             <column name="media" type="double"/>
         </addColumn>
     </changeSet>
+    <changeSet id="addstatuscolumn" author="apal">
+        <addColumn tableName="users">
+            <column name="status" type="varchar(64)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="changetype status" author="apal">
+        <modifyDataType columnName="status" tableName="users" newDataType="int"/>
+    </changeSet>
 </databaseChangeLog>

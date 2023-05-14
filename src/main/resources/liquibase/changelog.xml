@@ -17,5 +17,6 @@
     <include file="liquibase/2023-03-14-student_diploma_mapping.xml"/>
     <include file="liquibase/2023-03-06-finished-student-diploma-mapping.xml"/>
     <include file="liquibase/2023-03-25-major_year_student_mapping.xml"/>
+    <include file="liquibase/2023-04-02-diploma_period_mapping.xml"/>
 
 </databaseChangeLog>

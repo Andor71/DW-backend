@@ -17,11 +17,6 @@ public class DiplomaEntity {
 
     @Column(name = "title", length = 512)
     private String title;
-
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "id_period")
-    private PeriodEntity period;
-
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_student_id"))
     private UserEntity student;
@@ -31,10 +26,6 @@ public class DiplomaEntity {
 
     @Column(name = "stage", length = 64)
     private String stage;
-
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "teacher_id", foreignKey = @ForeignKey(name = "fk_teacher_1"))
-    private UserEntity teacher;
 
     @Column(name = "visibility")
     private Integer visibility;

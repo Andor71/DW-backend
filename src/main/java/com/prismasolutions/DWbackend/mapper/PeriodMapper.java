@@ -30,6 +30,7 @@ public class PeriodMapper {
         periodDto.setImplementationOfTopics(periodEntity.getImplementationOfTopics());
         periodDto.setDocumentumUpload(periodEntity.getDocumentumUpload());
         periodDto.setDiplomaDefend(periodEntity.getDiplomaDefend());
+        periodDto.setSecondAllocation(periodEntity.getSecondAllocation());
         if(periodEntity.getMajor() != null){
             periodDto.setMajor(majorMapper.toDto(periodEntity.getMajor()));
         }
@@ -56,6 +57,7 @@ public class PeriodMapper {
         periodEntity.setImplementationOfTopics(periodDto.getImplementationOfTopics());
         periodEntity.setDocumentumUpload(periodDto.getDocumentumUpload());
         periodEntity.setDiplomaDefend(periodDto.getDiplomaDefend());
+        periodEntity.setSecondAllocation(periodDto.getSecondAllocation());
 
         periodEntity.setMajor(majorMapper.toEntity(periodDto.getMajor()));
         periodEntity.setYear(yearMapper.toEntity(periodDto.getYear()));

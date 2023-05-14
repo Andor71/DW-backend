@@ -39,4 +39,7 @@ public class UserEntity {
 
     @Column(name="media")
     private Double media;
+
+    @Column(name = "status")
+    private Integer status;
 }

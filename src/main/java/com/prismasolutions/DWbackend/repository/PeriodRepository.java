@@ -10,9 +10,14 @@ import java.util.List;
 public interface PeriodRepository extends JpaRepository<PeriodEntity, Long> {
     PeriodEntity findByMajor_MajorId(Long majorId);
 
+    PeriodEntity findByMajor_MajorIdAndYear_Id(Long majorId, Long id);
+
+
+
     boolean existsByMajor_MajorId(Long majorId);
 
     List<PeriodEntity> findByYear_Id(Long id);
+
 
 
 

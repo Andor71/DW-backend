@@ -14,4 +14,5 @@ public class UserDto {
     private String token;
     private Boolean active;
     private String validationCode;
+    private Integer status;
 }

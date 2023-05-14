@@ -31,4 +31,9 @@
                                  referencedTableName="year"
                                  referencedColumnNames="year_id"
                                  onDelete="CASCADE"/>    </changeSet>
+    <changeSet id="add second allocation" author="apal">
+        <addColumn tableName="period">
+            <column name="second_allocation" type="date" ></column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

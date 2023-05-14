@@ -66,10 +66,10 @@ public class DiplomaController {
         }
     }
 
-    @GetMapping("/get-all-visible-diplomas")
+    @GetMapping("/get-all-visible-diplomas-for-given-major")
     public ResponseEntity<?> getAllVisibleDiplomas(){
         try {
-            return ResponseEntity.ok().body(diplomaService.getAllVisible());
+            return ResponseEntity.ok().body(diplomaService.getAllVisibleForGivenMajor());
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
@@ -95,7 +95,7 @@ public class DiplomaController {
         }
     }
 
-    @GetMapping("/get-all-applied-diplomas")
+    @GetMapping("/get-all-applied-diplomas-for-student")
     public ResponseEntity<?> getAllAppliedDiplomas(){
         try {
             return ResponseEntity.ok().body(diplomaService.getAllAppliedDiplomas());
@@ -104,7 +104,7 @@ public class DiplomaController {
         }
     }
     @PostMapping("/change-applied-priority/{userID}")
-    public ResponseEntity<?> getAllAppliedDiplomas(@RequestBody List<DiplomaDto> diplomaDtos, @PathVariable Long userID){
+    public ResponseEntity<?> changeAppliedPriority(@RequestBody List<DiplomaDto> diplomaDtos, @PathVariable Long userID){
         try {
             diplomaService.changeAppliedPriority(diplomaDtos,userID);
             return ResponseEntity.ok().build();
@@ -113,7 +113,7 @@ public class DiplomaController {
         }
     }
 
-    @GetMapping("/getbyIDForStudent/{diplomaID}")
+    @GetMapping("/get-by-id-for-student/{diplomaID}")
     public ResponseEntity<?> getByIdForStudent( @PathVariable Long diplomaID){
         try {
             return ResponseEntity.ok().body(diplomaService.getByIdForStudent(diplomaID));
@@ -122,7 +122,7 @@ public class DiplomaController {
         }
     }
 
-    @GetMapping("/get-all-diploma-applies")
+    @GetMapping("/get-all-applied-diplomas-for-approving")
     public ResponseEntity<?> getAllDiplomaApplies(){
         try {
             return ResponseEntity.ok().body(diplomaService.getAllDiplomaApplies());
@@ -154,11 +154,11 @@ public class DiplomaController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
-    @PostMapping("/enable-all-student-diploma")
-    public ResponseEntity<?> enableAllStudentDiploma(){
+    @PostMapping("/enable-all-student-diploma/{allaccepted}")
+    public ResponseEntity<?> enableAllStudentDiploma(@PathVariable Boolean allaccepted){
         try {
-            diplomaService.enableAllStudentDiploma();
-            return ResponseEntity.ok().build();
+
+            return ResponseEntity.ok().body(diplomaService.enableAllStudentDiploma(allaccepted));
         }catch (NoAuthority e){
             return ResponseEntity.status(403).body(new ErrorResponseDto(e.getMessage()));
         }
@@ -170,6 +170,28 @@ public class DiplomaController {
     public ResponseEntity<?> getAllStudentsApplied(@PathVariable Long diplomaID){
         try {
             return ResponseEntity.ok().body(diplomaService.getAllStudentsApplied(diplomaID));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+    @GetMapping("/get-current-diploma")
+    public ResponseEntity<?> getAllStudentsApplied(){
+        try {
+            return ResponseEntity.ok().body(diplomaService.getCurrentDiploma());
+        }
+        catch (NoAuthority e){
+            return ResponseEntity.status(403).body(new ErrorResponseDto(e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+    @PostMapping("/finalize-applies")
+    public ResponseEntity<?> finalizeApplies(){
+        try {
+            diplomaService.finalizeApplies();
+            return ResponseEntity.ok().build();
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));

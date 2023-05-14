@@ -8,7 +8,7 @@ public interface FileStorageService {
 
     DocumentDto storeFile(MultipartFile file, Long yearID);
 
-    Resource loadFile(String fileName);
+    Resource loadFile(Long documentID);
 
 
 }

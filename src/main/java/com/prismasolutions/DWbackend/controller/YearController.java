@@ -22,7 +22,6 @@ public class YearController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
@@ -32,6 +31,7 @@ public class YearController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
+
     @PostMapping("/create")
     public ResponseEntity<?> create() {
         try {

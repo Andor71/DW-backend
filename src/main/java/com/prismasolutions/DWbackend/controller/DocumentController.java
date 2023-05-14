@@ -76,10 +76,10 @@ public class DocumentController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
-    @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<?> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+    @GetMapping("/downloadFile/{documentID}")
+    public ResponseEntity<?> downloadFile(@PathVariable Long documentID, HttpServletRequest request) {
 
-        Resource resource = fileStorageService.loadFile(fileName);
+        Resource resource = fileStorageService.loadFile(documentID);
 
         String contentType = null;
         try {
@@ -93,7 +93,7 @@ public class DocumentController {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 

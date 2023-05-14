@@ -70,15 +70,16 @@ public class FileStorageServiceImpl implements FileStorageService{
             DocumentEntity documentEntity = documentRepository.findByNameAndYear_Id(fileName,yearEntity.get().getId());
 
             if(documentEntity != null){
-
                 documentEntity.setName(fileName);
                 documentEntity.setYear(yearEntity.get());
+//                documentEntity.setPath(targetLocation.toString());
                 documentEntity = documentRepository.save(documentEntity);
 
             }else{
                 DocumentEntity document = new DocumentEntity();
                 document.setName(fileName);
                 document.setYear(yearEntity.get());
+//                document.setPath(targetLocation.toString());
                 documentEntity = documentRepository.save(document);
             }
 
@@ -89,17 +90,25 @@ public class FileStorageServiceImpl implements FileStorageService{
         }
     }
     @Override
-    public Resource loadFile(String fileName) {
+    public Resource loadFile(Long documentID) {
+        if(documentID == null){
+            throw new IllegalArgumentException("Id cannot be null!");
+        }
+
+        DocumentEntity documentEntity = documentRepository.findById(documentID).orElseThrow(()->{
+            throw new IllegalArgumentException("ID cannot be null!");
+        });
+
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Path filePath = this.fileStorageLocation.resolve(documentEntity.getName()).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if(resource.exists()) {
                 return resource;
             } else {
-                throw new MyFileNotFoundException("File not found " + fileName);
+                throw new MyFileNotFoundException("File not found ");
             }
         } catch (Exception e) {
-            throw new MyFileNotFoundException("File not found: " + fileName);
+            throw new MyFileNotFoundException("File not found");
         }
     }
 }

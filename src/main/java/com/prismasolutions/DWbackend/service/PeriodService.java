@@ -21,4 +21,6 @@ public interface PeriodService {
     PeriodDto getById(Long id);
 
     List<PeriodByYearDto> getAllPeriodsByYear();
+
+    PeriodDto getCurrentPeriodForMajor(Long majorID);
 }

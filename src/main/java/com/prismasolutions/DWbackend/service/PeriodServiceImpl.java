@@ -85,7 +85,53 @@ public class PeriodServiceImpl implements PeriodService{
 
     @Override
     public PeriodDto update(PeriodDto periodDto) {
-        return null;
+        if(periodDto.getStartOfEnteringTopics() == null){
+            throw new IllegalArgumentException("StartOfEnteringTopics cannot be null!");
+        }
+        if(periodDto.getEndOfEnteringTopics() == null){
+            throw new IllegalArgumentException("EndOfEnteringTopics cannot be null!");
+        }
+        if(periodDto.getFirstTopicAdvertisement() == null){
+            throw new IllegalArgumentException("FirstTopicAdvertisement cannot be null!");
+        }
+        if(periodDto.getFirstTopicAdvertisementEnd() == null){
+            throw new IllegalArgumentException("FirstTopicAdvertisementEnd cannot be null!");
+        }
+        if(periodDto.getFirstAllocation() == null){
+            throw new IllegalArgumentException("FirstAllocation cannot be null!");
+        }
+        if(periodDto.getSecondTopicAdvertisement() == null){
+            throw new IllegalArgumentException("SecondTopicAdvertisement defend cannot be null!");
+        }
+        if(periodDto.getDocumentumUpload() == null){
+            throw new IllegalArgumentException("Documentum Upload cannot be null!");
+        }
+        if(periodDto.getSecondTopicAdvertisementEnd() == null){
+            throw new IllegalArgumentException("SecondTopicAdvertisementEnd cannot be null!");
+        }
+        if(periodDto.getImplementationOfTopics() == null){
+            throw new IllegalArgumentException("ImplementationOfTopics cannot be null!");
+        }
+        if(periodDto.getDiplomaDefend() == null) {
+            throw new IllegalArgumentException("Diploma defend cannot be null!");
+        }
+        if(periodDto.getMajor() == null){
+            throw new IllegalArgumentException("Major cannot be null!");
+        }
+
+        PeriodEntity periodEntity = periodRepository.findById(periodDto.getPeriodId()).orElseThrow(()->{
+            throw new EntityNotFoundException("No period found whit this id!");
+        });
+
+        Optional<MajorEntity> major = majorRepository.findById(periodDto.getMajor().getMajorId());
+
+        if(major.isEmpty()){
+            throw new EntityNotFoundException("No major found whit this id!");
+        }
+
+        PeriodEntity newPeriod = periodRepository.save(periodMapper.toEntity(periodDto));
+
+        return periodMapper.toDto(newPeriod);
     }
 
     @Override
@@ -154,5 +200,22 @@ public class PeriodServiceImpl implements PeriodService{
         }
 
         return periodByYearDtos;
+    }
+
+    @Override
+    public PeriodDto getCurrentPeriodForMajor(Long majorID) {
+
+        if(majorID == null){
+            throw new IllegalArgumentException("Major id cannot be null!");
+        }
+
+        MajorEntity majorEntity = majorRepository.findById(majorID).orElseThrow(()->{
+            throw new EntityNotFoundException("Entity not found!");
+        });
+
+
+
+
+        return null;
     }
 }

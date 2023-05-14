@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
@@ -48,19 +49,23 @@ public class DiplomaFilesServiceImpl implements DiplomaFilesService{
 
         String type = "";
         if(file.getContentType().equals("application/pdf")) {
-            type = "PDF";
+            type = ".pdf";
         }
         if(file.getContentType().equals("application/zip") || file.getContentType().equals("application/x-zip-compressed")) {
-            type = "ZIP";
+            type = ".zip";
         }
         diplomaFilesEntity.setType(type);
         diplomaFilesEntity.setDiploma(diplomaEntityOptional.get());
         diplomaFilesEntity.setTitle(StringUtils.cleanPath(file.getOriginalFilename()));
         diplomaFilesEntity.setAuthor(utility.getCurrentUser());
         diplomaFilesEntity.setVisibility(0);
+        diplomaFilesEntity.setPath(ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/diplomaFiles/")
+                .path(file.getOriginalFilename()+type)
+                .toUriString());
 
         DiplomaFilesEntity newDiplomaFile = diplomaFilesRepository.save(diplomaFilesEntity);
-        Path filePath  = Path.of("src/main/resources/diplomaFiles/"+diplomaEntityOptional.get().getDiplomaId()+"/");
+        Path filePath  = Path.of("src/main/resources/diplomaFiles/"+diplomaEntityOptional.get().getDiplomaId());
         Files.copy(file.getInputStream(),filePath, StandardCopyOption.REPLACE_EXISTING);
 
         return diplomaFilesMapper.toDto(newDiplomaFile);
