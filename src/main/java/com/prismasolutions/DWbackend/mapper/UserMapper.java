@@ -2,6 +2,7 @@ package com.prismasolutions.DWbackend.mapper;
 
 import com.prismasolutions.DWbackend.dto.user.UserDto;
 import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
+import com.prismasolutions.DWbackend.entity.DepartmentEntity;
 import com.prismasolutions.DWbackend.entity.MajorEntity;
 import com.prismasolutions.DWbackend.entity.UserEntity;
 import com.prismasolutions.DWbackend.repository.MajorRepository;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     private final MajorRepository majorRepository;
+    private final DepartmentMapper departmentMapper;
     private final MajorMapper majorMapper;
 
     public UserEntity toEntity(UserDto userDto){
@@ -25,7 +27,6 @@ public class UserMapper {
         userEntity.setId(userDto.getId());
         userEntity.setFirstName(userDto.getFirstName());
         userEntity.setLastName(userDto.getLastName());
-        userEntity.setUserImage(userDto.getImage());
         userEntity.setEmail(userDto.getEmail());
         userEntity.setRole(userDto.getRole());
         userEntity.setPassword(userDto.getPassword());
@@ -53,6 +54,9 @@ public class UserMapper {
         if(userEntity.getMajor() != null){
             userResponseDto.setMajorDto(majorMapper.toDto(userEntity.getMajor()));
         }
+        if(userEntity.getRole().equals("departmenthead")){
+            userResponseDto.setDepartment(departmentMapper.toDto(userEntity.getDepartmentEntity()));
+        }
 
 
         return userResponseDto;
@@ -67,7 +71,6 @@ public class UserMapper {
         userDto.setId(userEntity.getId());
         userDto.setFirstName(userEntity.getFirstName());
         userDto.setLastName(userEntity.getLastName());
-        userDto.setImage(userEntity.getUserImage());
         userDto.setEmail(userEntity.getEmail());
         userDto.setRole(userEntity.getRole());
         userDto.setActive(userEntity.getActive());
@@ -91,8 +94,11 @@ public class UserMapper {
         userEntity.setActive(userResponseDto.getActive());
         userEntity.setMedia(userResponseDto.getMedia());
         userEntity.setStatus(userResponseDto.getStatus());
-        if(userEntity.getMajor() != null){
+        if(userResponseDto.getMajorDto() != null){
             userEntity.setMajor(majorMapper.toEntity(userResponseDto.getMajorDto()));
+        }
+        if(userResponseDto.getRole().equals("departmenthead")){
+            userEntity.setDepartmentEntity(departmentMapper.toEntity(userResponseDto.getDepartment()));
         }
         return userEntity;
     }

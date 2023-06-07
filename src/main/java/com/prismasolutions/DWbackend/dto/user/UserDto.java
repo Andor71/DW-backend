@@ -1,5 +1,6 @@
 package com.prismasolutions.DWbackend.dto.user;
 
+import com.prismasolutions.DWbackend.enums.UserStatus;
 import lombok.Data;
 
 @Data
@@ -10,9 +11,8 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String role;
-    private String image;
     private String token;
     private Boolean active;
     private String validationCode;
-    private Integer status;
+    private UserStatus status;
 }

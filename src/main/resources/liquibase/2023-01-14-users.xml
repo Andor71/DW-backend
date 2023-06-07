@@ -43,4 +43,28 @@
     <changeSet id="changetype status" author="apal">
         <modifyDataType columnName="status" tableName="users" newDataType="int"/>
     </changeSet>
+
+    <changeSet id="changetype status back to varchar" author="apal">
+        <modifyDataType tableName="users" columnName="status" newDataType="varchar(64)" />
+    </changeSet>
+
+    <changeSet id="adding_validation_and_deleting_userImag" author="apal">
+        <dropColumn tableName="users" columnName="user_image"/>
+        <addColumn tableName="users">
+            <column name="validation_code"  type="varchar(64) "/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="adding_department" author="apal">
+        <addColumn tableName="users">
+            <column name="fk_department_id" type="bigint"/>
+
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="users" baseColumnNames="fk_department_id"
+                                 constraintName="fk_department_id"
+                                 referencedTableName="department" referencedColumnNames="department_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
 </databaseChangeLog>

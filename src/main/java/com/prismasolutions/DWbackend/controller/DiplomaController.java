@@ -2,8 +2,10 @@ package com.prismasolutions.DWbackend.controller;
 
 
 import com.prismasolutions.DWbackend.dto.diploma.DiplomaDto;
+import com.prismasolutions.DWbackend.dto.diploma.ScoreDto;
 import com.prismasolutions.DWbackend.dto.errorResponse.ErrorResponseDto;
 import com.prismasolutions.DWbackend.exception.NoAuthority;
+import com.prismasolutions.DWbackend.exception.UserFriendlyException;
 import com.prismasolutions.DWbackend.service.DiplomaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/diploma")
 @CrossOrigin
 @AllArgsConstructor
+
 public class DiplomaController {
     private final DiplomaService diplomaService;
 
@@ -43,6 +46,14 @@ public class DiplomaController {
     public ResponseEntity<?> create(@PathVariable Long id){
         try {
             return ResponseEntity.ok().body(diplomaService.getByID(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+    @GetMapping("/get-finished/{id}")
+    public ResponseEntity<?> getFinished(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok().body(diplomaService.getFinished(id));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
@@ -90,7 +101,10 @@ public class DiplomaController {
         try {
             diplomaService.assignToDiploma(diplomaID,userID);
             return ResponseEntity.ok().build();
-        }catch (Exception e){
+        }catch (UserFriendlyException e){
+            return ResponseEntity.status(415).body(e);
+        }
+        catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
@@ -122,10 +136,10 @@ public class DiplomaController {
         }
     }
 
-    @GetMapping("/get-all-applied-diplomas-for-approving")
-    public ResponseEntity<?> getAllDiplomaApplies(){
+    @GetMapping("/get-all-applied-diplomas-for-approving/{id}")
+    public ResponseEntity<?> getAllDiplomaApplies(@PathVariable Long id){
         try {
-            return ResponseEntity.ok().body(diplomaService.getAllDiplomaApplies());
+            return ResponseEntity.ok().body(diplomaService.getAllDiplomaApplies(id));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
@@ -133,7 +147,7 @@ public class DiplomaController {
     @PatchMapping("/sort-students-for-diploma")
     public ResponseEntity<?> sortStudentsForDiploma(){
         try {
-            diplomaService.sortStudentsForDiploma();
+            diplomaService.sortStudentsForDiplomaManual();
             return ResponseEntity.ok().build();
         }catch (NoAuthority e){
             return ResponseEntity.status(403).body(new ErrorResponseDto(e.getMessage()));
@@ -197,4 +211,27 @@ public class DiplomaController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
+
+    @GetMapping("/get-all-finished")
+    public ResponseEntity<?> getAllFinished(){
+        try {
+
+            return ResponseEntity.ok().body(   diplomaService.getAllFinished());
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+
+    @PostMapping("/set-score")
+    public ResponseEntity<?> setScore(@RequestBody ScoreDto scoreDto){
+        try {
+
+            return ResponseEntity.ok().body(   diplomaService.setScore(scoreDto));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+
 }

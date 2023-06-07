@@ -1,5 +1,6 @@
 package com.prismasolutions.DWbackend.entity;
 
+import com.prismasolutions.DWbackend.enums.DiplomaFileType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,9 +22,9 @@ public class DiplomaFilesEntity {
     @JoinColumn(name = "diploma_id", foreignKey = @ForeignKey(name = "fk_diploma_id"))
     private DiplomaEntity diploma;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", length = 64)
-    private String type;
-
+    private DiplomaFileType type;
     @Column(name = "path", length = 64)
     private String path;
 

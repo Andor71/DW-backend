@@ -36,4 +36,10 @@
             <column name="second_allocation" type="date" ></column>
         </addColumn>
     </changeSet>
+    <changeSet id="adding_sorted_assertions" author="apal">
+        <addColumn tableName="period">
+            <column name="first_allocation_sorted" type="boolean"/>
+            <column name="second_allocation_sorted" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

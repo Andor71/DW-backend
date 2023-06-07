@@ -1,6 +1,8 @@
 package com.prismasolutions.DWbackend.dto.user;
 
+import com.prismasolutions.DWbackend.dto.department.DepartmentDto;
 import com.prismasolutions.DWbackend.dto.major.MajorDto;
+import com.prismasolutions.DWbackend.enums.UserStatus;
 import lombok.Data;
 
 @Data
@@ -10,9 +12,9 @@ public class UserResponseDto {
     private String firstName;
     private String lastName;
     private String role;
-    private String image;
     private Boolean active;
     private Double media;
     private MajorDto majorDto;
-    private Integer status;
+    private UserStatus status;
+    private DepartmentDto department;
 }

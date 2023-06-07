@@ -12,6 +12,7 @@ public interface PeriodRepository extends JpaRepository<PeriodEntity, Long> {
 
     PeriodEntity findByMajor_MajorIdAndYear_Id(Long majorId, Long id);
 
+    boolean existsByMajor_MajorIdAndYear_Id(Long majorId, Long id);
 
 
     boolean existsByMajor_MajorId(Long majorId);

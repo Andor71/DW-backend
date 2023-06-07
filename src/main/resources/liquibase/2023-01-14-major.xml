@@ -85,5 +85,16 @@
     <changeSet id="dropyear" author="apal">
         <dropColumn tableName="major" columnName="year"/>
     </changeSet>
+    <changeSet id="adding_department" author="apal">
+        <addColumn tableName="major">
+            <column name="fk_department_id" type="bigint" />
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="major" baseColumnNames="fk_department_id"
+                                 constraintName="fk_department_Id"
+                                 referencedTableName="department" referencedColumnNames="department_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
+    </changeSet>
 
 </databaseChangeLog>

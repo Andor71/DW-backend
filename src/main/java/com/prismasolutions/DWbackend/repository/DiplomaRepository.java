@@ -1,6 +1,7 @@
 package com.prismasolutions.DWbackend.repository;
 
 import com.prismasolutions.DWbackend.entity.DiplomaEntity;
+import com.prismasolutions.DWbackend.enums.DiplomaStages;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,9 @@ public interface DiplomaRepository extends JpaRepository<DiplomaEntity, Long> {
     DiplomaEntity findByStudent_Id(Long id);
 
     boolean existsByStudent_IdAndDiplomaId(Long id, Long diplomaId);
+
+    List<DiplomaEntity> findByStage(DiplomaStages stage);
+
 
 
 

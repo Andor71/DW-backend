@@ -12,25 +12,14 @@ public class PeriodDto {
     private MajorDto major;
     private YearDto year;
     private Date startOfEnteringTopics;
-
     private Date endOfEnteringTopics;
-
     private Date firstTopicAdvertisement;
-
     private Date firstTopicAdvertisementEnd;
-
     private Date firstAllocation;
-
     private Date secondTopicAdvertisement;
-
     private Date secondTopicAdvertisementEnd;
-
     private Date secondAllocation;
-
     private Date implementationOfTopics;
-
     private Date documentumUpload;
-
     private Date diplomaDefend;
-
 }

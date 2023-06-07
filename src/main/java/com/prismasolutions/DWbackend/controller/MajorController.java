@@ -12,12 +12,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/major")
 @CrossOrigin
 @AllArgsConstructor
+
 public class MajorController {
     private final MajorService majorService;
-    @GetMapping("/get-all-without-period")
-    public ResponseEntity<?> getAllWithoutPeriod(){
+    @GetMapping("/get-all-without-period/{yearID}")
+    public ResponseEntity<?> getAllWithoutPeriod(@PathVariable Long yearID){
         try {
-            return ResponseEntity.ok().body(majorService.getAllWithoutPeriod());
+            return ResponseEntity.ok().body(majorService.getAllWithoutPeriod(yearID));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+
+        }
+    }
+    @GetMapping("/get-all")
+    public ResponseEntity<?> getAll(){
+        try {
+            return ResponseEntity.ok().body(majorService.getAll());
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
 

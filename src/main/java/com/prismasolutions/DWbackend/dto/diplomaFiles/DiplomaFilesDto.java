@@ -2,6 +2,7 @@ package com.prismasolutions.DWbackend.dto.diplomaFiles;
 
 import com.prismasolutions.DWbackend.dto.diploma.DiplomaDto;
 import com.prismasolutions.DWbackend.dto.user.UserDto;
+import com.prismasolutions.DWbackend.enums.DiplomaFileType;
 import lombok.Data;
 
 
@@ -13,7 +14,7 @@ public class DiplomaFilesDto {
 
     private DiplomaDto diploma;
 
-    private String type;
+    private DiplomaFileType type;
 
     private String path;
 

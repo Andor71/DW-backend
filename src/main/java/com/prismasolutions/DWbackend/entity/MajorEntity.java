@@ -19,6 +19,10 @@ public class MajorEntity {
     @Column(name = "programme")
     private String programme;
 
+    @JoinColumn(name = "fk_department_id")
+    @OneToOne(cascade = CascadeType.DETACH)
+    private DepartmentEntity departmentEntity;
+
     @Column(name = "diploma_type")
     private String diplomaType;
 

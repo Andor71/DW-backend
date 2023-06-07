@@ -43,8 +43,8 @@ public class PeriodController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         try {
-
-            return ResponseEntity.ok().body(periodService.delete(id));
+            periodService.delete(id);
+            return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }

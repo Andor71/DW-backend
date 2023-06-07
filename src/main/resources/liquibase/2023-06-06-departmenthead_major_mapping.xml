@@ -1,0 +1,32 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_diploma_major_mapping" author="apal">
+        <createTable tableName="diploma_major_mapping">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fk_user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_major_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="diploma_major_mapping" baseColumnNames="fk_diploma_id" constraintName="fk_diploma_id"
+                                 referencedTableName="diploma"
+                                 referencedColumnNames="diploma_id"
+                                 onDelete="CASCADE"
+        />
+        <addForeignKeyConstraint baseTableName="diploma_major_mapping" baseColumnNames="fk_major_id" constraintName="fk_major_id"
+                                 referencedTableName="major"
+                                 referencedColumnNames="major_id"
+                                 onDelete="CASCADE"
+        />
+
+    </changeSet>
+
+</databaseChangeLog>

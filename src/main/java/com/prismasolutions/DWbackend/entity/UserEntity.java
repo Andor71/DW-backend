@@ -1,5 +1,6 @@
 package com.prismasolutions.DWbackend.entity;
 
+import com.prismasolutions.DWbackend.enums.UserStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,22 +25,23 @@ public class UserEntity {
 
     @Column(name = "password")
     private String password;
-
-    @Column(name = "user_image")
-    private String userImage;
-
     @Column(name = "active")
     private Boolean active;
 
     @Column(name = "role")
     private String role;
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "fk_department_id")
+    private DepartmentEntity departmentEntity;
+
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "major_id", foreignKey = @ForeignKey(name = "fk_teacher_mapping_id"))
     private MajorEntity major;
-
     @Column(name="media")
     private Double media;
-
+    @Column(name="validation_code")
+    private String validationCode;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Integer status;
+    private UserStatus status;
 }

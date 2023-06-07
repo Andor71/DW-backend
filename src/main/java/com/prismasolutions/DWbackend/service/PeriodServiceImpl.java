@@ -1,6 +1,5 @@
 package com.prismasolutions.DWbackend.service;
 
-import com.prismasolutions.DWbackend.dto.major.AllMajorDto;
 import com.prismasolutions.DWbackend.dto.period.PeriodByYearDto;
 import com.prismasolutions.DWbackend.dto.period.PeriodDto;
 import com.prismasolutions.DWbackend.dto.year.YearDto;
@@ -29,6 +28,7 @@ public class PeriodServiceImpl implements PeriodService{
     private final YearMapper yearMapper;
     private final YearRepository yearRepository;
     private final MajorRepository majorRepository;
+    private final YearService yearService;
 
     @Override
     public PeriodDto create(PeriodDto periodDto) {
@@ -72,13 +72,17 @@ public class PeriodServiceImpl implements PeriodService{
             throw new EntityNotFoundException("No major found with this id!");
         }
 
-        PeriodEntity periodEntityOptional = periodRepository.findByMajor_MajorId(periodDto.getMajor().getMajorId());
+        PeriodEntity periodEntityOptional = periodRepository.findByMajor_MajorIdAndYear_Id(periodDto.getMajor().getMajorId(),periodDto.getYear().getId());
 
         if(periodEntityOptional != null){
             throw new IllegalArgumentException("This major already has a period!");
         }
 
-        PeriodEntity newPeriod = periodRepository.save(periodMapper.toEntity(periodDto));
+        PeriodEntity newPeriod = periodMapper.toEntity(periodDto);
+
+        newPeriod.setFirstAllocationSorted(false);
+        newPeriod.setSecondAllocationSorted(false);
+        newPeriod = periodRepository.save(newPeriod);
 
         return periodMapper.toDto(newPeriod);
     }
@@ -150,23 +154,21 @@ public class PeriodServiceImpl implements PeriodService{
 
     @Override
     public List<PeriodDto> getAllActivePeriod() {
-        return periodMapper.toDtoList(periodRepository.findAll());
+        YearDto yearDto = yearService.getCurrent();
+        return periodMapper.toDtoList(periodRepository.findByYear_Id(yearDto.getId()));
     }
 
     @Override
-    public Long delete(Long id) {
+    public void delete(Long id) {
         if(id == null){
             throw new IllegalArgumentException("Id cannot be null!");
         }
 
-        PeriodEntity periodEntity = periodRepository.findByMajor_MajorId(id);
-
-        if(periodEntity == null){
-            throw new EntityNotFoundException("No entity found with this id!");
-        }
+        PeriodEntity periodEntity = periodRepository.findById(id).orElseThrow(()->{
+            throw new EntityNotFoundException("Entity not found!");
+        });
 
         periodRepository.delete(periodEntity);
-        return id;
     }
 
     @Override
@@ -212,10 +214,8 @@ public class PeriodServiceImpl implements PeriodService{
         MajorEntity majorEntity = majorRepository.findById(majorID).orElseThrow(()->{
             throw new EntityNotFoundException("Entity not found!");
         });
+        YearDto yearDto = yearService.getCurrent();
 
-
-
-
-        return null;
+        return  periodMapper.toDto(periodRepository.findByMajor_MajorIdAndYear_Id(majorEntity.getMajorId(), yearDto.getId()));
     }
 }

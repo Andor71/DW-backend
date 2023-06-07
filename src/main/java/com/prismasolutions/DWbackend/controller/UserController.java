@@ -5,14 +5,17 @@ import com.prismasolutions.DWbackend.config.TokenAuthenticationService;
 import com.prismasolutions.DWbackend.config.UserAuthenticationProvider;
 import com.prismasolutions.DWbackend.dto.diploma.DiplomaDto;
 import com.prismasolutions.DWbackend.dto.errorResponse.ErrorResponseDto;
+import com.prismasolutions.DWbackend.dto.user.PasswordDto;
 import com.prismasolutions.DWbackend.dto.user.UserLoginDto;
 import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
 import com.prismasolutions.DWbackend.enums.PeriodEnums;
+import com.prismasolutions.DWbackend.enums.UserStatus;
 import com.prismasolutions.DWbackend.service.UserService;
 import com.prismasolutions.DWbackend.util.Utility;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,6 +42,7 @@ public class UserController {
     @PeriodDateDependent(key = PeriodEnums.START_OF_ENTERING_TOPICS)
     public ResponseEntity<?> healthCheck() {
         return ResponseEntity.ok().build();
+
     }
 
     @PostMapping("/login")
@@ -53,10 +57,15 @@ public class UserController {
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 
+            UserResponseDto user = userService.getCurrentUserDto();
+            if(user.getRole().equals("student")){
+             if(userService.getCurrentUserDto().getStatus().equals(UserStatus.SEARCHING) && utility.requestAccepted(PeriodEnums.SECOND_ALLOCATION))
+                    throw new BadCredentialsException("Lejártak a diploma leosztási időszakok, keresd fel a titkárságot!");
+            }
             return ResponseEntity.ok().body(userService.getCurrentUserDto());
         }
         catch (BadCredentialsException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorResponseDto(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -109,6 +118,15 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
+    @PostMapping("/create-teacher")
+    public ResponseEntity<?> createTeacher(@RequestBody UserResponseDto userResponseDto) {
+        try {
+            return ResponseEntity.ok().body(userService.createTeacher(userResponseDto));
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
 
     @PatchMapping("/update-student")
     public ResponseEntity<?> updateStudent(@RequestBody UserResponseDto userResponseDto) {
@@ -119,11 +137,31 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
+    @PatchMapping("/update-teacher")
+    public ResponseEntity<?> updateTeacher(@RequestBody UserResponseDto userResponseDto) {
+        try {
+            return ResponseEntity.ok().body(userService.updateTeacher(userResponseDto));
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
         try {
             userService.deleteStudent(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
+        }
+    }
+    @DeleteMapping("/delete-teacher/{id}")
+    public ResponseEntity<?> deleteTeacher(@PathVariable Long id) {
+        try {
+            userService.deleteTeacher(id);
             return ResponseEntity.ok().build();
         }
         catch (Exception e) {
@@ -150,6 +188,15 @@ public class UserController {
     public ResponseEntity<?> checkPreconditions( @PathVariable PeriodEnums enums){
         try {
             return ResponseEntity.ok().body(utility.requestAccepted(enums));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordDto passwordDto){
+        try {
+            userService.changePassword(passwordDto);
+            return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -54,5 +54,9 @@ public class PeriodEntity {
 
     @Column(name = "diploma_defend")
     private Date diplomaDefend;
+    @Column(name = "first_allocation_sorted")
+    private Boolean firstAllocationSorted;
+    @Column(name = "second_allocation_sorted")
+    private Boolean secondAllocationSorted;
 
 }

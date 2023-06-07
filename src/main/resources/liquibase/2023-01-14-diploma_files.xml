@@ -37,4 +37,10 @@
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"/>
     </changeSet>
+    <changeSet id="change_path_size" author="apal">
+        <modifyDataType tableName="diploma_files" columnName="type" newDataType="text"/>
+    </changeSet>
+    <changeSet id="change_path_size_2" author="apal">
+        <modifyDataType tableName="diploma_files" columnName="path" newDataType="text"/>
+    </changeSet>
 </databaseChangeLog>

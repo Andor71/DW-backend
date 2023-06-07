@@ -8,5 +8,9 @@ import org.springframework.stereotype.Repository;
 public interface DiplomaFilesRepository extends JpaRepository<DiplomaFilesEntity, Long> {
     DiplomaFilesEntity findByDiploma_DiplomaIdAndAuthor_Id(Long diplomaId, Long id);
 
+    DiplomaFilesEntity findByAuthor_Id(Long id);
+
+
+
 
 }

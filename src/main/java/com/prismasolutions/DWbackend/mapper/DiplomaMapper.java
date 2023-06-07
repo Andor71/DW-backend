@@ -40,7 +40,7 @@ public class DiplomaMapper {
         diplomaDto.setDetails(diplomaEntity.getDetails());
         diplomaDto.setNecessaryKnowledge(diplomaEntity.getNecessaryKnowledge());
         diplomaDto.setDifferentExpectations(diplomaEntity.getDifferentExpectations());
-
+        diplomaDto.setBibliography(diplomaEntity.getBibliography());
         if(diplomaEntity.getStudent() != null){
             diplomaDto.setStudent(userMapper.toUserResponseDto(diplomaEntity.getStudent()));
         }

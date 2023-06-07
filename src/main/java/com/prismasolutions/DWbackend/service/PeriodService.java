@@ -16,7 +16,7 @@ public interface PeriodService {
 
     List<PeriodDto> getAllActivePeriod();
 
-    Long delete(Long id);
+    void delete(Long id);
 
     PeriodDto getById(Long id);
 

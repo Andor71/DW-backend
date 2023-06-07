@@ -62,6 +62,7 @@
             <column name="different_expectations" type="text"/>
         </addColumn>
     </changeSet>
+
     <changeSet id="delete_period" author="apal">
         <dropColumn tableName="diploma" columnName="id_period"/>
     </changeSet>

@@ -1,5 +1,6 @@
 package com.prismasolutions.DWbackend.service;
 
+import com.prismasolutions.DWbackend.dto.user.PasswordDto;
 import com.prismasolutions.DWbackend.dto.user.UserDto;
 import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
 import com.prismasolutions.DWbackend.enums.PeriodEnums;
@@ -70,7 +71,7 @@ public interface UserService {
      * Fetches a {@link UserDto} of the logged in user containing all user data except password.
      * @return The {@link UserDto}
      */
-    UserDto getCurrentUserDto();
+    UserResponseDto getCurrentUserDto();
 
     UserResponseDto getById(Long id);
 
@@ -89,4 +90,12 @@ public interface UserService {
     List<UserResponseDto> createStudentsViaFile(MultipartFile file,Long periodID);
 
     List<UserResponseDto> getAllStudentsForPeriod(Long periodID);
+
+    void changePassword(PasswordDto passwordDto);
+
+    void deleteTeacher(Long id);
+
+    UserResponseDto createTeacher(UserResponseDto userResponseDto);
+
+    UserResponseDto updateTeacher(UserResponseDto userResponseDto);
 }

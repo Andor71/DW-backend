@@ -76,6 +76,7 @@ public class DocumentController {
             return ResponseEntity.badRequest().body(new ErrorResponseDto(e.getMessage()));
         }
     }
+
     @GetMapping("/downloadFile/{documentID}")
     public ResponseEntity<?> downloadFile(@PathVariable Long documentID, HttpServletRequest request) {
 

@@ -4,6 +4,7 @@ import com.prismasolutions.DWbackend.dto.period.PeriodDto;
 import com.prismasolutions.DWbackend.dto.user.UserDto;
 import com.prismasolutions.DWbackend.dto.user.UserResponseDto;
 import com.prismasolutions.DWbackend.entity.UserEntity;
+import com.prismasolutions.DWbackend.enums.DiplomaStages;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +19,7 @@ public class DiplomaDto {
     private List<PeriodDto> periods;
     private UserResponseDto student;
     private Double score;
-    private String stage;
+    private DiplomaStages stage;
     private Integer visibility;
     private String keywords;
     private String type;

@@ -1,5 +1,6 @@
 package com.prismasolutions.DWbackend.entity;
 
+import com.prismasolutions.DWbackend.enums.DiplomaStages;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,8 +25,9 @@ public class DiplomaEntity {
     @Column(name = "score")
     private Double score;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "stage", length = 64)
-    private String stage;
+    private DiplomaStages stage;
 
     @Column(name = "visibility")
     private Integer visibility;

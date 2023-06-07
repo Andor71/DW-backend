@@ -35,12 +35,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/user/register",
                         "/user/login",
                         "/user/start-password-recovery",
-                        "/user/change-password")
+                        "/user/change-password","/change-password")
                 .permitAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/user/verify-recovery-code/*",
-                        "/user/health-check")
+                        "/user/health-check","/diploma/get-all-finished","/diploma/get-finished/*","/diploma/*/download-diploma-file/*","/diploma-file/*/get-diploma-file/*","/diploma-file/*/download-diploma-file/*")
                 .permitAll()
                 .and()
                 .authorizeRequests()

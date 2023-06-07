@@ -32,16 +32,29 @@ public class MajorServiceImpl implements MajorService{
     private final YearMapper yearMapper;
 
     @Override
-    public List<MajorDto> getAllWithoutPeriod() {
+    public List<MajorDto> getAllWithoutPeriod(Long yearID) {
+        if(yearID == null){
+            throw new IllegalArgumentException("Id canot be null!");
+        }
+        YearEntity yearEntity = yearRepository.findById(yearID).orElseThrow(()->{
+            throw new IllegalArgumentException("Enity not found!");
+        });
 
         List<MajorEntity> majorEntitiesAll = majorRepository.findAll();
+
         List<MajorEntity> majorEntitiesWithoutPeriod = new ArrayList<>();
-        for (MajorEntity major:majorEntitiesAll){
-            if(!majorRepository.exists(major.getMajorId().intValue())){
-                majorEntitiesWithoutPeriod.add(major);
+
+        majorEntitiesAll.forEach((x)->{
+            if(!periodRepository.existsByMajor_MajorIdAndYear_Id(x.getMajorId(),yearEntity.getId())){
+                majorEntitiesWithoutPeriod.add(x);
             }
-        }
+        });
         return majorMapper.toDtoList(majorEntitiesWithoutPeriod);
+    }
+
+    @Override
+    public List<MajorDto> getAll() {
+        return  majorMapper.toDtoList(majorRepository.findAll());
     }
 
 

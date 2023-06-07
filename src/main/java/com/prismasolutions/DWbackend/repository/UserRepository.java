@@ -1,6 +1,7 @@
 package com.prismasolutions.DWbackend.repository;
 
 import com.prismasolutions.DWbackend.entity.UserEntity;
+import com.prismasolutions.DWbackend.enums.UserStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     List<UserEntity> findByActiveAndRole(Boolean active, String role);
 
+    List<UserEntity> findByActiveTrueAndStatusAndRole(UserStatus status, String role);
+
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query( value ="SELECT * FROM users WHERE user_id IN ( SELECT fk_student_id  FROM student_diploma_mapping )",nativeQuery = true)
@@ -25,6 +29,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findByRoleOrRole(String role, String role1);
 
     List<UserEntity> findByRoleOrRoleAndIdNot(String role, String role1, Long id);
+
+    Optional<UserEntity> findByValidationCode(String validationCode);
+
+
 
 
 }

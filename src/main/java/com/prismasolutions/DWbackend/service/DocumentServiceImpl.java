@@ -1,7 +1,6 @@
 package com.prismasolutions.DWbackend.service;
 
 import com.prismasolutions.DWbackend.dto.document.DocumentResponseDto;
-import com.prismasolutions.DWbackend.dto.year.YearDto;
 import com.prismasolutions.DWbackend.entity.DocumentEntity;
 import com.prismasolutions.DWbackend.entity.YearEntity;
 import com.prismasolutions.DWbackend.mapper.DocumentMapper;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,33 +43,17 @@ public class DocumentServiceImpl implements DocumentService{
     @Override
     public List<DocumentResponseDto> getAllDocumentsByYear() {
 
-        int startYear = Calendar.getInstance().get(Calendar.YEAR);
-        int endYear =Calendar.getInstance().get(Calendar.YEAR) +1;
+        List<DocumentResponseDto> documentsByYearDtos = new ArrayList<>();
 
-        ArrayList<DocumentResponseDto> documentResponseDtos = new ArrayList<>();
+        List<YearEntity> yearEntities = yearRepository.findAll();
 
-        for(int i = 0; i <2 ; i++){
-            // Get year from DB , if null means no years was creted so return this section;
+        yearEntities.forEach((x)->{
+            DocumentResponseDto documentsByYearDto = new DocumentResponseDto();
+            documentsByYearDto.setYearDto(yearMapper.toDto(x));
+            documentsByYearDto.setDocuments(documentMapper.toDtoList(documentRepository.findByYear_Id(x.getId())));
+            documentsByYearDtos.add(documentsByYearDto);
+        });
 
-            YearEntity yearEntity = yearRepository.findByStartYearAndEndYear(startYear,endYear);
-            if(yearEntity == null){
-                return documentResponseDtos;
-            }
-            YearDto yearDto = yearMapper.toDto(yearEntity);
-
-            List<DocumentEntity> documentEntities = documentRepository.findByYear_Id(yearDto.getId());
-
-            DocumentResponseDto documentResponseDto = new DocumentResponseDto();
-
-            documentResponseDto.setYearDto(yearDto);
-            documentResponseDto.setDocuments(documentMapper.toDtoList(documentEntities));
-
-            documentResponseDtos.add(documentResponseDto);
-            startYear++;
-            endYear++;
-
-        }
-
-        return documentResponseDtos;
+        return documentsByYearDtos;
     }
 }
